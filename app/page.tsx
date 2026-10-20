@@ -136,7 +136,31 @@ export default function HomePage() {
 
       {/* Diferenciais */}
       <section aria-label="Diferenciais" className="border-b border-mist-200 bg-white">
-        <ul className="container-site grid grid-cols-1 gap-6 py-10 sm:grid-cols-2 lg:grid-cols-5">
+        {/* Celular: carrossel vertical animado */}
+        <div className="container-site py-6 sm:hidden">
+          <div className="ticker-window relative h-[84px] overflow-hidden rounded-2xl border border-mist-200 bg-mist-50 motion-reduce:h-auto">
+            <ul className="animate-ticker-y motion-reduce:animate-none">
+              {[...highlights, ...highlights].map(({ icon: Icon, title, text }, i) => (
+                <li
+                  key={`${title}-${i}`}
+                  aria-hidden={i >= highlights.length ? true : undefined}
+                  className={`flex h-[84px] items-center gap-4 px-5 ${i >= highlights.length ? "motion-reduce:hidden" : ""}`}
+                >
+                  <span className="grid size-12 shrink-0 place-items-center rounded-xl bg-navy-800 text-white">
+                    <Icon aria-hidden="true" className="size-6" strokeWidth={1.6} />
+                  </span>
+                  <span className="min-w-0">
+                    <span className="block text-[16px] font-semibold text-navy-800">{title}</span>
+                    <span className="block text-[14px] leading-snug text-ink-500">{text}</span>
+                  </span>
+                </li>
+              ))}
+            </ul>
+          </div>
+        </div>
+
+        {/* Tablet e desktop */}
+        <ul className="container-site hidden gap-6 py-10 sm:grid sm:grid-cols-2 lg:grid-cols-5">
           {highlights.map(({ icon: Icon, title, text }) => (
             <li key={title} className="flex items-center gap-4">
               <span className="grid size-11 shrink-0 place-items-center rounded-xl bg-mist-100 text-navy-800">
@@ -286,7 +310,7 @@ export default function HomePage() {
       <section className="bg-mist-50 py-20 sm:py-28">
         <div className="container-site grid items-center gap-14 lg:grid-cols-2 lg:gap-20">
           <div className="relative">
-            <div className="relative aspect-[682/350] overflow-hidden rounded-3xl">
+            <div className="relative aspect-[682/332] overflow-hidden rounded-3xl">
               <Image
                 src="/images/historia-1990.jpg"
                 alt="Foto antiga da família e da equipe na primeira loja da Disk Marmitinha"
@@ -295,12 +319,12 @@ export default function HomePage() {
                 className="object-cover"
               />
             </div>
-            <div className="absolute -bottom-7 left-6 rounded-2xl bg-navy-800 px-6 py-5 text-white shadow-lift">
-              <p className="font-display text-[32px] leading-none font-semibold">Desde {site.since}</p>
-              <p className="mt-1.5 text-[13px] text-mist-200">Mais de 30 anos de confiança</p>
+            <div className="mt-4 flex flex-wrap items-baseline gap-x-4 gap-y-1 rounded-2xl bg-navy-800 px-6 py-5 text-white">
+              <p className="font-display text-[30px] leading-none font-semibold sm:text-[32px]">Desde {site.since}</p>
+              <p className="text-[14px] text-mist-200">Mais de 30 anos de confiança e tradição</p>
             </div>
           </div>
-          <div className="pt-6 lg:pt-0">
+          <div>
             <SectionHeading
               eyebrow="Nossa história"
               title={<>De fábrica de marmitex a <strong className="font-semibold">casa & estilo</strong></>}

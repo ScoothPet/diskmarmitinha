@@ -37,7 +37,7 @@ export default function AboutPage() {
               Tudo começou quando o Sr. José Ferreira deixou o interior de Minas em busca de novas oportunidades na capital. Ao lado da esposa, Maria de Fátima, enfrentou desafios e construiu uma trajetória de muito trabalho, honestidade e dedicação.
             </p>
           </div>
-          <div className="relative aspect-[682/350] overflow-hidden rounded-3xl shadow-lift">
+          <div className="relative aspect-[682/332] overflow-hidden rounded-3xl shadow-lift">
             <Image
               src="/images/historia-1990.jpg"
               alt="Foto antiga da família e da equipe na primeira loja da Disk Marmitinha"
