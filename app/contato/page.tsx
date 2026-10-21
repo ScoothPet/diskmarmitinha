@@ -1,3 +1,4 @@
+import Link from "next/link";
 import type { Metadata } from "next";
 import { Clock, Mail, MapPin } from "lucide-react";
 import { LeadForm } from "@/components/lead-form";
@@ -22,7 +23,7 @@ export default function ContactPage() {
       <PageHero
         eyebrow="Contato"
         title="Fale com a Disk Marmitinha"
-        description="Tire dúvidas, consulte a disponibilidade de um produto ou envie sua lista. Respondemos em horário comercial."
+        description={<>Tire dúvidas, consulte a disponibilidade de um produto ou envie sua lista. Respondemos em horário comercial. Veja também as <Link href="/ajuda" className="font-semibold text-navy-800 underline underline-offset-2">perguntas frequentes</Link>.</>}
       />
       <section className="py-14 sm:py-20">
         <div className="container-site grid gap-12 lg:grid-cols-[0.9fr_1.1fr] lg:gap-20">

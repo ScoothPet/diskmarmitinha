@@ -70,6 +70,7 @@ export function Footer() {
             <li><Link href="/empresas" className="hover:text-white">Empresas e condomínios</Link></li>
             <li><Link href="/orcamento" className="hover:text-white">Solicitar orçamento</Link></li>
             <li><Link href="/unidades" className="hover:text-white">Unidades</Link></li>
+            <li><Link href="/ajuda" className="hover:text-white">Ajuda (FAQ)</Link></li>
             <li><Link href="/contato" className="hover:text-white">Contato</Link></li>
           </ul>
         </div>

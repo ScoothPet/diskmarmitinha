@@ -73,6 +73,7 @@ export const nav = [
   { href: "/empresas", label: "Empresas e condomínios" },
   { href: "/quem-somos", label: "Quem somos" },
   { href: "/unidades", label: "Unidades" },
+  { href: "/ajuda", label: "Ajuda" },
   { href: "/contato", label: "Contato" },
 ];
 
