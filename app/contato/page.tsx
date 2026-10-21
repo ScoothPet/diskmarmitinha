@@ -14,7 +14,7 @@ export const metadata: Metadata = {
 export default function ContactPage() {
   const items = [
     { icon: Phone, label: "Telefone (BH e Lagoa Santa)", value: site.phone.display, href: telLink },
-    { icon: WhatsAppIcon, label: "WhatsApp de atendimento", value: "Chamar no WhatsApp", href: whatsappLink() },
+    { icon: WhatsAppIcon, label: "WhatsApp da unidade Belo Horizonte", value: site.whatsapp.display, href: whatsappLink("Olá! Vim pelo site e quero falar com a unidade Belo Horizonte.") },
     {
       icon: WhatsAppIcon,
       label: "WhatsApp da unidade Lagoa Santa",

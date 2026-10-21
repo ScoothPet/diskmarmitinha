@@ -49,15 +49,6 @@ export function Header() {
               <Phone aria-hidden="true" className="size-3.5 text-gold-300" />
               {site.phone.display}
             </a>
-            <a
-              href={whatsappLagoaSantaLink("Olá! Vim pelo site e quero falar com a unidade Lagoa Santa.")}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="hidden items-center gap-2 hover:text-white lg:flex"
-            >
-              <WhatsAppIcon className="size-4 text-gold-300" />
-              WhatsApp Lagoa Santa {site.whatsappLagoaSanta.display}
-            </a>
           </div>
         </div>
       </div>

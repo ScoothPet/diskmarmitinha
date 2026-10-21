@@ -24,7 +24,7 @@ type Form = {
   email: string;
   audience: Audience;
   company: string;
-  cnpj: string;
+  doc: string;
   notes: string;
 };
 
@@ -42,11 +42,24 @@ const empty: Form = {
   email: "",
   audience: "casa",
   company: "",
-  cnpj: "",
+  doc: "",
   notes: "",
 };
 
 const maskCep = (v: string) => v.replace(/\D/g, "").slice(0, 8).replace(/^(\d{5})(\d)/, "$1-$2");
+const maskDoc = (v: string) => {
+  const d = v.replace(/\D/g, "").slice(0, 14);
+  if (d.length <= 11)
+    return d
+      .replace(/^(\d{3})(\d)/, "$1.$2")
+      .replace(/^(\d{3})\.(\d{3})(\d)/, "$1.$2.$3")
+      .replace(/\.(\d{3})(\d{1,2})$/, ".$1-$2");
+  return d
+    .replace(/^(\d{2})(\d)/, "$1.$2")
+    .replace(/^(\d{2})\.(\d{3})(\d)/, "$1.$2.$3")
+    .replace(/\.(\d{3})(\d)/, ".$1/$2")
+    .replace(/(\d{4})(\d{1,2})$/, "$1-$2");
+};
 const maskPhone = (v: string) => {
   const d = v.replace(/\D/g, "").slice(0, 11);
   if (d.length <= 2) return d.length ? `(${d}` : "";
@@ -117,7 +130,7 @@ export function QuoteForm() {
       form.email && `E-mail: ${form.email}`,
       `Perfil: ${audience}`,
       form.audience !== "casa" && form.company && `${form.audience === "empresa" ? "Empresa" : "Condomínio"}: ${form.company}`,
-      form.cnpj && `CNPJ: ${form.cnpj}`,
+      form.doc && `${form.doc.replace(/\D/g, "").length > 11 ? "CNPJ" : "CPF"}: ${form.doc}`,
     ]
       .filter(Boolean)
       .join("\n");
@@ -140,6 +153,8 @@ export function QuoteForm() {
     if (!form.name.trim()) e.name = "Informe seu nome.";
     if (form.phone.replace(/\D/g, "").length < 10) e.phone = "Informe um WhatsApp com DDD.";
     if (form.email && !/^\S+@\S+\.\S+$/.test(form.email)) e.email = "E-mail inválido.";
+    const docLen = form.doc.replace(/\D/g, "").length;
+    if (docLen && docLen !== 11 && docLen !== 14) e.doc = "Informe um CPF (11 dígitos) ou CNPJ (14 dígitos).";
     if (form.audience !== "casa" && !form.company.trim()) e.company = "Informe o nome.";
     setErrors(e);
     const first = Object.keys(e)[0];
@@ -179,7 +194,9 @@ export function QuoteForm() {
         </span>
         <h2 className="heading-md mt-6 text-navy-800">Pedido de orçamento enviado</h2>
         <p className="mx-auto mt-3 max-w-md text-[15px] leading-relaxed text-ink-500">
-          Sua lista foi enviada para a Disk Marmitinha e a página Minha lista foi esvaziada. Se a conversa não abriu, use o botão abaixo para enviar de novo. Respondemos em horário comercial com valores e prazo.
+          Sua lista foi enviada para o setor de atendimento da Disk Marmitinha com sucesso!
+          <br />
+          A nossa equipe vai atender a sua solicitação em horário comercial com valores e prazos.
         </p>
         <div className="mt-8 flex flex-wrap justify-center gap-3">
           <a href={whatsappLink(sent.message)} target="_blank" rel="noopener noreferrer" className="btn-whats">
@@ -499,12 +516,27 @@ export function QuoteForm() {
               <input id="phone" type="tel" autoComplete="tel-national" placeholder="(31) 90000-0000" value={form.phone} onChange={(e) => set("phone", maskPhone(e.target.value))} className={fieldCls("phone")} {...a11y("phone")} />
               {err("phone")}
             </div>
-            <div className="sm:col-span-2">
+            <div>
               <label htmlFor="email" className="field-label">
-                E-mail (opcional)
+                E-mail
               </label>
               <input id="email" type="email" autoComplete="email" value={form.email} onChange={(e) => set("email", e.target.value)} className={fieldCls("email")} {...a11y("email")} />
               {err("email")}
+            </div>
+            <div>
+              <label htmlFor="doc" className="field-label">
+                CPF/CNPJ
+              </label>
+              <input
+                id="doc"
+                inputMode="numeric"
+                placeholder="000.000.000-00"
+                value={form.doc}
+                onChange={(e) => set("doc", maskDoc(e.target.value))}
+                className={fieldCls("doc")}
+                {...a11y("doc")}
+              />
+              {err("doc")}
             </div>
             <fieldset className="sm:col-span-2">
               <legend className="field-label">A compra é para</legend>
@@ -536,12 +568,6 @@ export function QuoteForm() {
                   </label>
                   <input id="company" autoComplete="organization" value={form.company} onChange={(e) => set("company", e.target.value)} className={fieldCls("company")} {...a11y("company")} />
                   {err("company")}
-                </div>
-                <div>
-                  <label htmlFor="cnpj" className="field-label">
-                    CNPJ (opcional)
-                  </label>
-                  <input id="cnpj" inputMode="numeric" value={form.cnpj} onChange={(e) => set("cnpj", e.target.value)} className="field" />
                 </div>
               </>
             )}

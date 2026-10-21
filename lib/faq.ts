@@ -138,7 +138,7 @@ export const faqGroups: FaqGroup[] = [
       {
         id: "cnpj",
         q: "Preciso informar CNPJ?",
-        a: ["Não é obrigatório. No pedido de orçamento, marque Minha empresa ou Condomínio e informe o CNPJ se quiser."],
+        a: ["No pedido de orçamento há o campo CPF/CNPJ. Para compras de empresa ou condomínio, informe o CNPJ e marque Minha empresa ou Condomínio."],
       },
       {
         id: "clube",

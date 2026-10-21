@@ -3,7 +3,7 @@ import Image from "next/image";
 import { Car, Clock, MapPin, Phone, Star } from "lucide-react";
 import { PageHero } from "@/components/ui";
 import { WhatsAppIcon } from "@/components/icons";
-import { site, telLink, units, whatsappLagoaSantaLink, whatsappLink } from "@/lib/site";
+import { site, telLink, units, whatsappLink } from "@/lib/site";
 
 export const metadata: Metadata = {
   title: "Unidades",
@@ -54,19 +54,6 @@ export default function UnitsPage() {
                       Telefone {site.phone.display}
                     </a>
                   </li>
-                  {u.id === "ls" && (
-                    <li className="flex gap-3">
-                      <WhatsAppIcon className="mt-0.5 size-5 shrink-0 text-whats-600" />
-                      <a
-                        href={whatsappLagoaSantaLink("Olá! Vim pelo site e quero falar com a unidade Lagoa Santa.")}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="font-semibold text-navy-800 hover:underline"
-                      >
-                        WhatsApp da unidade Lagoa Santa: {site.whatsappLagoaSanta.display}
-                      </a>
-                    </li>
-                  )}
                   <li className="flex gap-3">
                     <Car aria-hidden="true" className="mt-0.5 size-5 shrink-0 text-navy-800" />
                     Estacionamento para clientes
@@ -90,7 +77,7 @@ export default function UnitsPage() {
                     <MapPin aria-hidden="true" className="size-4" />
                     Como chegar
                   </a>
-                  <a href={whatsappLink(`Olá! Tenho uma dúvida sobre a loja de ${u.name}.`)} className="btn-outline">
+                  <a href={whatsappLink(`Olá! Tenho uma dúvida sobre a loja de ${u.name}.`, u.whatsappNumber)} target="_blank" rel="noopener noreferrer" className="btn-outline">
                     <WhatsAppIcon className="size-5" />
                     WhatsApp
                   </a>

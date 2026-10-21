@@ -52,6 +52,8 @@ export type Unit = {
   image: string;
   imageAlt: string;
   rating: { value: string; count: number };
+  /** Número de WhatsApp da unidade (formato wa.me) */
+  whatsappNumber: string;
 };
 
 export const units: Unit[] = [
@@ -67,6 +69,7 @@ export const units: Unit[] = [
     image: "/images/unidade-belo-horizonte.jpg",
     imageAlt: "Fachada da unidade Belo Horizonte da Disk Marmitinha ao entardecer",
     rating: { value: "4,2", count: 75 },
+    whatsappNumber: "5531998402889",
   },
   {
     id: "ls",
@@ -79,6 +82,7 @@ export const units: Unit[] = [
     image: "/images/unidade-lagoa-santa.jpg",
     imageAlt: "Fachada da unidade Lagoa Santa da Disk Marmitinha",
     rating: { value: "4,5", count: 68 },
+    whatsappNumber: "5531971278706",
   },
 ];
 

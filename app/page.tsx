@@ -15,7 +15,7 @@ import {
   Truck,
 } from "lucide-react";
 import { categories } from "@/lib/catalog";
-import { site, units, whatsappLagoaSantaLink, whatsappLink } from "@/lib/site";
+import { site, units, whatsappLink } from "@/lib/site";
 import { CategoryCard, SectionHeading } from "@/components/ui";
 import { WhatsAppIcon } from "@/components/icons";
 
@@ -368,17 +368,6 @@ export default function HomePage() {
                       <p className="mt-1 text-[14px] text-ink-500">
                         {u.street}, {u.cityLine}
                       </p>
-                      {u.id === "ls" && (
-                        <a
-                          href={whatsappLagoaSantaLink("Olá! Vim pelo site e quero falar com a unidade Lagoa Santa.")}
-                          target="_blank"
-                          rel="noopener noreferrer"
-                          className="mt-2 inline-flex items-center gap-1.5 text-[14px] font-semibold text-whats-600 hover:underline"
-                        >
-                          <WhatsAppIcon className="size-4" />
-                          WhatsApp Lagoa Santa {site.whatsappLagoaSanta.display}
-                        </a>
-                      )}
                     </div>
                     <p className="flex items-center gap-1.5 rounded-full bg-mist-100 px-3 py-1.5 text-[13px] font-semibold text-navy-800">
                       <Star aria-hidden="true" className="size-4 fill-gold-500 text-gold-500" />
@@ -390,7 +379,7 @@ export default function HomePage() {
                       <MapPin aria-hidden="true" className="size-4" />
                       Como chegar
                     </a>
-                    <a href={whatsappLink(`Olá! Tenho uma dúvida sobre a loja de ${u.name}.`)} className="btn-outline">
+                    <a href={whatsappLink(`Olá! Tenho uma dúvida sobre a loja de ${u.name}.`, u.whatsappNumber)} target="_blank" rel="noopener noreferrer" className="btn-outline">
                       WhatsApp
                     </a>
                   </div>
