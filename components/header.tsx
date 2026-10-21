@@ -59,15 +59,15 @@ export function Header() {
           scrolled ? "border-mist-200 shadow-soft" : "border-transparent"
         }`}
       >
-        <div className="container-site flex h-[76px] items-center justify-between gap-6">
+        <div className="container-site flex h-[80px] items-center sm:h-[90px] lg:h-[96px] justify-between gap-6">
           <Link href="/" aria-label="Disk Marmitinha Casa & Estilo, página inicial" className="shrink-0">
             <Image
-              src="/images/logo-disk-marmitinha.svg"
+              src="/images/logo-disk-marmitinha-vertical.svg"
               alt="Disk Marmitinha casa & estilo"
-              width={1520}
-              height={292}
+              width={1267}
+              height={480}
               priority
-              className="h-9 w-auto sm:h-10"
+              className="h-[52px] w-auto sm:h-[60px] lg:h-[66px]"
             />
           </Link>
 
@@ -111,7 +111,7 @@ export function Header() {
         </div>
 
         {open && (
-          <div id="menu-mobile" className="h-[calc(100dvh-76px)] overflow-y-auto border-t border-mist-200 bg-white lg:hidden">
+          <div id="menu-mobile" className="h-[calc(100dvh-80px)] sm:h-[calc(100dvh-90px)] overflow-y-auto border-t border-mist-200 bg-white lg:hidden">
             <nav aria-label="Menu" className="container-site flex flex-col py-4">
               <Link href="/" className="border-b border-mist-100 py-4 text-[17px] font-medium text-ink-900">
                 Início

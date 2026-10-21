@@ -1,7 +1,16 @@
 import Image from "next/image";
 import Link from "next/link";
 import { categories } from "@/lib/catalog";
+import { Instagram, Mail, MapPin } from "lucide-react";
 import { site, units, whatsappLink } from "@/lib/site";
+import { WhatsAppIcon } from "./icons";
+
+const socials = [
+  { label: "Instagram @diskmarmitinha", href: site.instagram.url, icon: Instagram, external: true },
+  { label: "WhatsApp (31) 99840-2889", href: whatsappLink("Olá! Vim pelo site da Disk Marmitinha."), icon: WhatsAppIcon, external: true },
+  { label: "Google Maps: unidade Belo Horizonte", href: units[0].mapsUrl, icon: MapPin, external: true },
+  { label: `E-mail ${site.email}`, href: `mailto:${site.email}`, icon: Mail, external: false },
+];
 
 export function Footer() {
   return (
@@ -9,18 +18,30 @@ export function Footer() {
       <div className="container-site grid gap-12 py-16 md:grid-cols-2 lg:grid-cols-[1.3fr_1fr_1fr_1.2fr] lg:py-20">
         <div>
           <Image
-            src="/images/logo-disk-marmitinha-branco.svg"
+            src="/images/logo-disk-marmitinha-vertical-branco.svg"
             alt="Disk Marmitinha casa & estilo"
-            width={1520}
-            height={292}
-            className="h-10 w-auto"
+            width={1267}
+            height={480}
+            className="h-16 w-auto"
           />
           <p className="mt-6 max-w-xs text-[14px] leading-relaxed text-mist-300">
             Atacarejo de embalagens e utilidades desde {site.since}. Tudo para sua casa, sua empresa e seu condomínio.
           </p>
-          <a href={site.instagram.url} className="mt-6 inline-block text-[14px] font-semibold text-white hover:text-gold-300">
-            Instagram {site.instagram.handle}
-          </a>
+          <ul className="mt-7 flex gap-3" aria-label="Redes sociais e contato">
+            {socials.map(({ label, href, icon: Icon, external }) => (
+              <li key={label}>
+                <a
+                  href={href}
+                  aria-label={label}
+                  title={label}
+                  {...(external ? { target: "_blank", rel: "noopener noreferrer" } : {})}
+                  className="grid size-11 place-items-center rounded-full border border-white/15 bg-white/[0.06] text-white transition-colors hover:border-gold-300 hover:bg-gold-300 hover:text-navy-950"
+                >
+                  <Icon className="size-5" aria-hidden="true" />
+                </a>
+              </li>
+            ))}
+          </ul>
         </div>
 
         <div>
