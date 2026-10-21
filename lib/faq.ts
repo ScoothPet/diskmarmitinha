@@ -72,13 +72,13 @@ export const faqGroups: FaqGroup[] = [
       {
         id: "entregam",
         q: "Vocês fazem entrega?",
-        a: ["Sim, entregamos para todo o Brasil, com frete grátis a partir de R$ 150 em BH e região (consulte as condições). No pedido de orçamento, escolha Receber no endereço e informe o CEP e o endereço completo."],
+        a: ["Sim, entregamos para todo o Brasil, e pedidos a partir de R$ 150 em BH e região podem ter frete grátis, mediante condições (consulte as condições com a nossa equipe). No pedido de orçamento, escolha Receber no endereço e informe o CEP e o endereço completo."],
       },
       {
         id: "frete",
         q: "Quanto custa o frete e qual o prazo?",
         a: [
-          "Em BH e região, a entrega tem frete grátis a partir de R$ 150. Consulte as condições com a nossa equipe.",
+          "Em BH e região, pedidos a partir de R$ 150 podem ter frete grátis, mediante condições. O frete grátis não é automático: consulte as condições com a nossa equipe, que confirma junto com o orçamento se o seu pedido se enquadra.",
           "Para outras cidades e para pedidos abaixo desse valor, o frete e o prazo dependem do endereço e do volume e são informados junto com o orçamento, antes de você confirmar a compra.",
         ],
       },

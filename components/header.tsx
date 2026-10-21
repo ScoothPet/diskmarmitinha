@@ -59,12 +59,15 @@ export function Header() {
   return (
     <>
       <div className="bg-navy-900 text-[13px] text-mist-200">
-        <div className="container-site flex h-10 items-center justify-center gap-4 md:justify-between">
-          <Link href="/ajuda#frete" className="flex min-w-0 items-center justify-center gap-2 hover:text-white">
+        <div className="container-site flex min-h-10 items-center justify-center gap-4 md:h-10 md:justify-between">
+          <Link href="/ajuda#frete" className="flex min-w-0 items-center justify-center gap-2 py-1.5 text-center hover:text-white md:py-0">
             <Truck aria-hidden="true" className="size-4 shrink-0 text-gold-300" />
-            <span className="truncate">
+            <span className="leading-snug">
               {site.freeShipping.short}
-              <span className="hidden lg:inline"> · consulte as condições</span>
+              <span className="max-md:block max-md:text-[12px]">
+                <span className="hidden md:inline"> · </span>
+                <span className="font-semibold text-gold-300 underline underline-offset-2">{site.freeShipping.conditions}</span>
+              </span>
             </span>
           </Link>
           <div className="hidden shrink-0 items-center gap-6 md:flex">

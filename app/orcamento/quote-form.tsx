@@ -366,7 +366,7 @@ export function QuoteForm() {
             <div className="grid gap-3 sm:grid-cols-2">
               {(
                 [
-                  { v: "entrega", icon: Truck, title: "Receber no endereço", text: "Frete grátis a partir de R$ 150 em BH e região" },
+                  { v: "entrega", icon: Truck, title: "Receber no endereço", text: "Frete grátis a partir de R$ 150 em BH e região, consulte as condições" },
                   { v: "retirada", icon: Store, title: "Retirar na loja", text: "BH ou Lagoa Santa, com estacionamento" },
                 ] as const
               ).map(({ v, icon: Icon, title, text }) => (
@@ -465,7 +465,7 @@ export function QuoteForm() {
                 {err("uf")}
               </div>
               <p className="rounded-xl bg-mist-50 px-4 py-3 text-[13px] leading-relaxed text-ink-700 sm:col-span-6">
-                <strong className="font-semibold text-navy-800">Frete grátis a partir de R$ 150 em BH e região.</strong> Consulte as condições. Para outras cidades, entregamos para todo o Brasil e o valor do frete e o prazo são informados junto com o orçamento.
+                <strong className="font-semibold text-navy-800">Frete grátis a partir de R$ 150 em BH e região, mediante condições.</strong> Consulte as condições: a nossa equipe confirma se o seu pedido tem frete grátis junto com o orçamento. Para outras cidades, entregamos para todo o Brasil e o valor do frete e o prazo também são informados no orçamento.
               </p>
             </div>
           ) : (

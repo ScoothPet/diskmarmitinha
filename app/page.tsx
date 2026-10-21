@@ -24,7 +24,7 @@ const highlights = [
   { icon: Boxes, title: "Variedade", text: "Mais de 20 mil itens nas lojas" },
   { icon: ClipboardList, title: "Praticidade", text: "Orçamento direto pelo WhatsApp" },
   { icon: Car, title: "Estacionamento", text: "Nas duas unidades" },
-  { icon: Truck, title: "Frete grátis", text: "A partir de R$ 150 em BH e região" },
+  { icon: Truck, title: "Frete grátis", text: "A partir de R$ 150 em BH e região. Consulte as condições" },
 ];
 
 const steps = [
@@ -66,7 +66,7 @@ export default function HomePage() {
               Tudo o que sua <strong className="font-bold">casa</strong> e sua <strong className="font-bold">empresa</strong> precisam, em um só lugar.
             </h1>
             <p className="mt-6 max-w-xl text-[17px] leading-relaxed text-mist-200 sm:text-[18px]">
-              Embalagens, descartáveis, limpeza, utilidades e decoração com preço de atacarejo. Monte sua lista, peça o orçamento e receba onde estiver ou retire na loja. Frete grátis a partir de R$ 150 em BH e região.
+              Embalagens, descartáveis, limpeza, utilidades e decoração com preço de atacarejo. Monte sua lista, peça o orçamento e receba onde estiver ou retire na loja. Frete grátis a partir de R$ 150 em BH e região, consulte as condições.
             </p>
 
             <form action="/catalogo" method="get" role="search" className="mt-9 hidden max-w-xl items-center sm:flex gap-2 rounded-2xl bg-white p-2 shadow-lift">

@@ -18,7 +18,7 @@ const segments = [
 
 const benefits = [
   { icon: ClipboardList, title: "Lista recorrente", text: "Envie sua lista de reposição e receba o orçamento completo de uma vez." },
-  { icon: Truck, title: "Entrega ou retirada", text: "Frete grátis a partir de R$ 150 em BH e região, entrega para todo o Brasil ou retirada em BH e Lagoa Santa." },
+  { icon: Truck, title: "Entrega ou retirada", text: "Frete grátis a partir de R$ 150 em BH e região (consulte as condições), entrega para todo o Brasil ou retirada em BH e Lagoa Santa." },
   { icon: Recycle, title: "Coleta seletiva", text: "Lixeiras e coletores para cada tipo de resíduo e ambiente." },
 ];
 
