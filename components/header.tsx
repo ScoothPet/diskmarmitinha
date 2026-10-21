@@ -4,8 +4,8 @@ import Image from "next/image";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useEffect, useState } from "react";
-import { ClipboardList, Clock, Mail, Menu, X } from "lucide-react";
-import { nav, site, whatsappLink } from "@/lib/site";
+import { ClipboardList, Menu, Phone, Truck, X } from "lucide-react";
+import { nav, site, telLink, whatsappLagoaSantaLink, whatsappLink } from "@/lib/site";
 import { useQuote } from "./quote-provider";
 import { WhatsAppIcon } from "./icons";
 
@@ -37,18 +37,26 @@ export function Header() {
     <>
       <div className="bg-navy-900 text-[13px] text-mist-200">
         <div className="container-site flex h-10 items-center justify-between gap-4">
-          <p className="flex items-center gap-2">
-            <Clock aria-hidden="true" className="size-3.5 text-gold-300" />
-            <span>{site.hoursShort}</span>
-          </p>
-          <div className="hidden items-center gap-6 md:flex">
-            <a href={whatsappLink()} className="flex items-center gap-2 hover:text-white">
-              <WhatsAppIcon className="size-4 text-gold-300" />
-              {site.whatsapp.display}
+          <Link href="/ajuda#frete" className="flex min-w-0 items-center gap-2 hover:text-white">
+            <Truck aria-hidden="true" className="size-4 shrink-0 text-gold-300" />
+            <span className="truncate">
+              {site.freeShipping.short}
+              <span className="hidden lg:inline"> · consulte as condições</span>
+            </span>
+          </Link>
+          <div className="hidden shrink-0 items-center gap-6 md:flex">
+            <a href={telLink} className="flex items-center gap-2 hover:text-white" aria-label={`Telefone ${site.phone.display}`}>
+              <Phone aria-hidden="true" className="size-3.5 text-gold-300" />
+              {site.phone.display}
             </a>
-            <a href={`mailto:${site.email}`} className="flex items-center gap-2 hover:text-white">
-              <Mail aria-hidden="true" className="size-3.5 text-gold-300" />
-              {site.email}
+            <a
+              href={whatsappLagoaSantaLink("Olá! Vim pelo site e quero falar com a unidade Lagoa Santa.")}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="hidden items-center gap-2 hover:text-white lg:flex"
+            >
+              <WhatsAppIcon className="size-4 text-gold-300" />
+              WhatsApp Lagoa Santa {site.whatsappLagoaSanta.display}
             </a>
           </div>
         </div>
@@ -130,7 +138,22 @@ export function Header() {
                   Falar no WhatsApp
                 </a>
               </div>
-              <p className="mt-6 text-[14px] text-ink-500">{site.hoursShort}</p>
+              <div className="mt-6 grid gap-3 text-[15px]">
+                <a href={telLink} className="flex items-center gap-3 font-semibold text-navy-800">
+                  <Phone aria-hidden="true" className="size-4" />
+                  Telefone {site.phone.display}
+                </a>
+                <a
+                  href={whatsappLagoaSantaLink("Olá! Vim pelo site e quero falar com a unidade Lagoa Santa.")}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="flex items-center gap-3 font-semibold text-navy-800"
+                >
+                  <WhatsAppIcon className="size-4" />
+                  WhatsApp Lagoa Santa {site.whatsappLagoaSanta.display}
+                </a>
+                <p className="text-[14px] text-ink-500">{site.hoursShort}</p>
+              </div>
             </nav>
           </div>
         )}

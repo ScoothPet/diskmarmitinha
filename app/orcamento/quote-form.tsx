@@ -154,9 +154,11 @@ export function QuoteForm() {
   function send(channel: "whatsapp" | "email") {
     if (!validate()) return;
     const url = channel === "whatsapp" ? whatsappLink(message) : mailtoLink(`Pedido de orçamento - ${form.name}`, message);
+    setSent({ message });
+    clear();
+    setForm((f) => ({ ...f, notes: "" }));
     if (channel === "whatsapp") window.open(url, "_blank", "noopener,noreferrer");
     else window.location.href = url;
-    setSent({ message });
     window.scrollTo({ top: 0, behavior: "smooth" });
   }
 
@@ -177,7 +179,7 @@ export function QuoteForm() {
         </span>
         <h2 className="heading-md mt-6 text-navy-800">Pedido de orçamento enviado</h2>
         <p className="mx-auto mt-3 max-w-md text-[15px] leading-relaxed text-ink-500">
-          Sua lista foi aberta no WhatsApp da Disk Marmitinha. Se a conversa não abriu, use o botão abaixo. Respondemos em horário comercial com valores e prazo.
+          Sua lista foi enviada para a Disk Marmitinha e a página Minha lista foi esvaziada. Se a conversa não abriu, use o botão abaixo para enviar de novo. Respondemos em horário comercial com valores e prazo.
         </p>
         <div className="mt-8 flex flex-wrap justify-center gap-3">
           <a href={whatsappLink(sent.message)} target="_blank" rel="noopener noreferrer" className="btn-whats">
@@ -187,11 +189,7 @@ export function QuoteForm() {
           <button
             type="button"
             className="btn-outline"
-            onClick={() => {
-              clear();
-              setSent(null);
-              setForm((f) => ({ ...f, notes: "" }));
-            }}
+            onClick={() => setSent(null)}
           >
             Começar nova lista
           </button>
@@ -350,7 +348,7 @@ export function QuoteForm() {
             <div className="grid gap-3 sm:grid-cols-2">
               {(
                 [
-                  { v: "entrega", icon: Truck, title: "Receber no endereço", text: "Entregamos para todo o Brasil" },
+                  { v: "entrega", icon: Truck, title: "Receber no endereço", text: "Frete grátis a partir de R$ 150 em BH e região" },
                   { v: "retirada", icon: Store, title: "Retirar na loja", text: "BH ou Lagoa Santa, com estacionamento" },
                 ] as const
               ).map(({ v, icon: Icon, title, text }) => (
@@ -448,7 +446,9 @@ export function QuoteForm() {
                 <input id="uf" autoComplete="address-level1" maxLength={2} value={form.uf} onChange={(e) => set("uf", e.target.value.toUpperCase())} className={fieldCls("uf")} {...a11y("uf")} />
                 {err("uf")}
               </div>
-              <p className="text-[13px] text-ink-500 sm:col-span-6">O valor do frete e o prazo de entrega são informados junto com o orçamento.</p>
+              <p className="rounded-xl bg-mist-50 px-4 py-3 text-[13px] leading-relaxed text-ink-700 sm:col-span-6">
+                <strong className="font-semibold text-navy-800">Frete grátis a partir de R$ 150 em BH e região.</strong> Consulte as condições. Para outras cidades, entregamos para todo o Brasil e o valor do frete e o prazo são informados junto com o orçamento.
+              </p>
             </div>
           ) : (
             <fieldset className="mt-6" data-field="unit" tabIndex={-1}>

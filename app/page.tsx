@@ -15,7 +15,7 @@ import {
   Truck,
 } from "lucide-react";
 import { categories } from "@/lib/catalog";
-import { site, units, whatsappLink } from "@/lib/site";
+import { site, units, whatsappLagoaSantaLink, whatsappLink } from "@/lib/site";
 import { CategoryCard, SectionHeading } from "@/components/ui";
 import { WhatsAppIcon } from "@/components/icons";
 
@@ -24,7 +24,7 @@ const highlights = [
   { icon: Boxes, title: "Variedade", text: "Mais de 20 mil itens nas lojas" },
   { icon: ClipboardList, title: "Praticidade", text: "Orçamento direto pelo WhatsApp" },
   { icon: Car, title: "Estacionamento", text: "Nas duas unidades" },
-  { icon: Truck, title: "Entrega", text: "Para todo o Brasil ou retire na loja" },
+  { icon: Truck, title: "Frete grátis", text: "A partir de R$ 150 em BH e região" },
 ];
 
 const steps = [
@@ -66,7 +66,7 @@ export default function HomePage() {
               Tudo o que sua <strong className="font-bold">casa</strong> e sua <strong className="font-bold">empresa</strong> precisam, em um só lugar.
             </h1>
             <p className="mt-6 max-w-xl text-[17px] leading-relaxed text-mist-200 sm:text-[18px]">
-              Embalagens, descartáveis, limpeza, utilidades e decoração com preço de atacarejo. Monte sua lista, peça o orçamento e receba onde estiver ou retire na loja.
+              Embalagens, descartáveis, limpeza, utilidades e decoração com preço de atacarejo. Monte sua lista, peça o orçamento e receba onde estiver ou retire na loja. Frete grátis a partir de R$ 150 em BH e região.
             </p>
 
             <form action="/catalogo" method="get" role="search" className="mt-9 flex max-w-xl items-center gap-2 rounded-2xl bg-white p-2 shadow-lift">
@@ -247,7 +247,7 @@ export default function HomePage() {
                 "Atendimento dedicado para compras recorrentes",
                 "Lista completa enviada de uma vez pelo WhatsApp",
                 "Coleta seletiva e lixeiras para áreas comuns",
-                "Entrega para todo o Brasil ou retirada na loja",
+                "Frete grátis a partir de R$ 150 em BH e região (consulte as condições)",
               ].map((t) => (
                 <li key={t} className="flex gap-3 text-[16px]">
                   <Check aria-hidden="true" className="mt-0.5 size-5 shrink-0 text-gold-300" />
@@ -368,6 +368,17 @@ export default function HomePage() {
                       <p className="mt-1 text-[14px] text-ink-500">
                         {u.street}, {u.cityLine}
                       </p>
+                      {u.id === "ls" && (
+                        <a
+                          href={whatsappLagoaSantaLink("Olá! Vim pelo site e quero falar com a unidade Lagoa Santa.")}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="mt-2 inline-flex items-center gap-1.5 text-[14px] font-semibold text-whats-600 hover:underline"
+                        >
+                          <WhatsAppIcon className="size-4" />
+                          WhatsApp Lagoa Santa {site.whatsappLagoaSanta.display}
+                        </a>
+                      )}
                     </div>
                     <p className="flex items-center gap-1.5 rounded-full bg-mist-100 px-3 py-1.5 text-[13px] font-semibold text-navy-800">
                       <Star aria-hidden="true" className="size-4 fill-gold-500 text-gold-500" />

@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { ArrowRight, ChevronDown, Search, X } from "lucide-react";
 import { faqGroups, type FaqItem } from "@/lib/faq";
 import { normalize } from "@/lib/catalog";
@@ -23,12 +23,19 @@ function Question({ item, open }: { item: FaqItem; open?: boolean }) {
         ))}
         {item.links && (
           <div className="mt-4 flex flex-wrap gap-x-5 gap-y-2">
-            {item.links.map((l) => (
-              <Link key={l.href} href={l.href} className="inline-flex items-center gap-1.5 text-[14px] font-semibold text-navy-800 hover:underline">
-                {l.label}
-                <ArrowRight aria-hidden="true" className="size-3.5" />
-              </Link>
-            ))}
+            {item.links.map((l) =>
+              l.href.startsWith("http") ? (
+                <a key={l.href} href={l.href} target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-1.5 text-[14px] font-semibold text-navy-800 hover:underline">
+                  {l.label}
+                  <ArrowRight aria-hidden="true" className="size-3.5" />
+                </a>
+              ) : (
+                <Link key={l.href} href={l.href} className="inline-flex items-center gap-1.5 text-[14px] font-semibold text-navy-800 hover:underline">
+                  {l.label}
+                  <ArrowRight aria-hidden="true" className="size-3.5" />
+                </Link>
+              ),
+            )}
           </div>
         )}
       </div>
@@ -39,6 +46,21 @@ function Question({ item, open }: { item: FaqItem; open?: boolean }) {
 export function FaqBrowser() {
   const [query, setQuery] = useState("");
   const q = normalize(query.trim());
+
+  // Abre a pergunta indicada no endereço (ex.: /ajuda#frete)
+  useEffect(() => {
+    const openFromHash = () => {
+      const id = decodeURIComponent(window.location.hash.slice(1));
+      const el = id ? document.getElementById(id) : null;
+      if (el instanceof HTMLDetailsElement) {
+        el.open = true;
+        el.scrollIntoView({ block: "start" });
+      }
+    };
+    openFromHash();
+    window.addEventListener("hashchange", openFromHash);
+    return () => window.removeEventListener("hashchange", openFromHash);
+  }, []);
 
   const results = useMemo(() => {
     if (!q) return [];

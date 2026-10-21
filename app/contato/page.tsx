@@ -1,19 +1,26 @@
 import Link from "next/link";
 import type { Metadata } from "next";
-import { Clock, Mail, MapPin } from "lucide-react";
+import { Clock, Mail, MapPin, Phone } from "lucide-react";
 import { LeadForm } from "@/components/lead-form";
 import { PageHero } from "@/components/ui";
 import { WhatsAppIcon } from "@/components/icons";
-import { site, units, whatsappLink } from "@/lib/site";
+import { site, telLink, units, whatsappLagoaSantaLink, whatsappLink } from "@/lib/site";
 
 export const metadata: Metadata = {
   title: "Contato",
-  description: "Fale com a Disk Marmitinha pelo WhatsApp (31) 99840-2889 ou pelo e-mail loja01@diskmarmitinha.com.br.",
+  description: "Fale com a Disk Marmitinha pelo telefone (31) 3452-7011, pelo WhatsApp ou pelo e-mail loja01@diskmarmitinha.com.br.",
 };
 
 export default function ContactPage() {
   const items = [
-    { icon: WhatsAppIcon, label: "WhatsApp", value: site.whatsapp.display, href: whatsappLink() },
+    { icon: Phone, label: "Telefone (BH e Lagoa Santa)", value: site.phone.display, href: telLink },
+    { icon: WhatsAppIcon, label: "WhatsApp de atendimento", value: "Chamar no WhatsApp", href: whatsappLink() },
+    {
+      icon: WhatsAppIcon,
+      label: "WhatsApp da unidade Lagoa Santa",
+      value: site.whatsappLagoaSanta.display,
+      href: whatsappLagoaSantaLink("Olá! Vim pelo site e quero falar com a unidade Lagoa Santa."),
+    },
     { icon: Mail, label: "E-mail", value: site.email, href: `mailto:${site.email}` },
     { icon: Clock, label: "Horário das lojas", value: site.hoursShort },
   ];

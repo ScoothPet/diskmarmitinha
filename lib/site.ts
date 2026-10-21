@@ -8,6 +8,20 @@ export const site = {
     display: "(31) 99840-2889",
     number: "5531998402889",
   },
+  /** Telefone fixo geral, atende as duas unidades */
+  phone: {
+    display: "(31) 3452-7011",
+    tel: "+553134527011",
+  },
+  /** WhatsApp de atendimento da unidade Lagoa Santa */
+  whatsappLagoaSanta: {
+    display: "(31) 97127-8706",
+    number: "5531971278706",
+  },
+  freeShipping: {
+    short: "Frete grátis a partir de R$ 150 em BH e região",
+    full: "Entrega com frete grátis a partir de R$ 150 em BH e região. Consulte as condições.",
+  },
   email: "loja01@diskmarmitinha.com.br",
   instagram: {
     handle: "@diskmarmitinha",
@@ -77,10 +91,16 @@ export const nav = [
   { href: "/contato", label: "Contato" },
 ];
 
-export function whatsappLink(message?: string) {
-  const base = `https://wa.me/${site.whatsapp.number}`;
+export function whatsappLink(message?: string, number: string = site.whatsapp.number) {
+  const base = `https://wa.me/${number}`;
   return message ? `${base}?text=${encodeURIComponent(message)}` : base;
 }
+
+export function whatsappLagoaSantaLink(message?: string) {
+  return whatsappLink(message, site.whatsappLagoaSanta.number);
+}
+
+export const telLink = `tel:${site.phone.tel}`;
 
 export function mailtoLink(subject: string, body: string) {
   return `mailto:${site.email}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;

@@ -72,12 +72,15 @@ export const faqGroups: FaqGroup[] = [
       {
         id: "entregam",
         q: "Vocês fazem entrega?",
-        a: ["Sim, entregamos para todo o Brasil. No pedido de orçamento, escolha Receber no endereço e informe o CEP e o endereço completo."],
+        a: ["Sim, entregamos para todo o Brasil, com frete grátis a partir de R$ 150 em BH e região (consulte as condições). No pedido de orçamento, escolha Receber no endereço e informe o CEP e o endereço completo."],
       },
       {
         id: "frete",
         q: "Quanto custa o frete e qual o prazo?",
-        a: ["O valor do frete e o prazo dependem do endereço e do volume do pedido. Eles são informados junto com o orçamento, antes de você confirmar a compra."],
+        a: [
+          "Em BH e região, a entrega tem frete grátis a partir de R$ 150. Consulte as condições com a nossa equipe.",
+          "Para outras cidades e para pedidos abaixo desse valor, o frete e o prazo dependem do endereço e do volume e são informados junto com o orçamento, antes de você confirmar a compra.",
+        ],
       },
       {
         id: "retirada",
@@ -166,8 +169,14 @@ export const faqGroups: FaqGroup[] = [
       {
         id: "contato",
         q: "Como falo com a Disk Marmitinha?",
-        a: [`Pelo WhatsApp ${site.whatsapp.display}, pelo e-mail ${site.email} ou pelo formulário da página de contato.`],
-        links: [{ label: "Página de contato", href: "/contato" }],
+        a: [
+          `Pelo telefone ${site.phone.display}, que atende as duas lojas, pelo WhatsApp de atendimento, pelo e-mail ${site.email} ou pelo formulário da página de contato.`,
+          `A unidade Lagoa Santa também atende pelo WhatsApp ${site.whatsappLagoaSanta.display}.`,
+        ],
+        links: [
+          { label: "Página de contato", href: "/contato" },
+          { label: "WhatsApp Lagoa Santa", href: `https://wa.me/${site.whatsappLagoaSanta.number}` },
+        ],
       },
     ],
   },

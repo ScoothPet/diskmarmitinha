@@ -56,7 +56,7 @@ const jsonLd = {
     "@type": "Store",
     name: `${site.shortName} ${u.name}`,
     image: `${site.url}${u.image}`,
-    telephone: "+55 31 99840-2889",
+    telephone: "+55 31 3452-7011",
     email: site.email,
     url: site.url,
     address: {

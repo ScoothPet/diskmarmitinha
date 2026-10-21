@@ -2,13 +2,13 @@ import Image from "next/image";
 import Link from "next/link";
 import { categories } from "@/lib/catalog";
 import { Facebook, Instagram, Mail, MapPin } from "lucide-react";
-import { site, units, whatsappLink } from "@/lib/site";
+import { site, telLink, units, whatsappLagoaSantaLink, whatsappLink } from "@/lib/site";
 import { WhatsAppIcon } from "./icons";
 
 const socials = [
   { label: "Instagram @diskmarmitinha", href: site.instagram.url, icon: Instagram, external: true },
   { label: "Facebook Disk Marmitinha Casa & Estilo", href: site.facebook.url, icon: Facebook, external: true },
-  { label: "WhatsApp (31) 99840-2889", href: whatsappLink("Olá! Vim pelo site da Disk Marmitinha."), icon: WhatsAppIcon, external: true },
+  { label: "WhatsApp de atendimento", href: whatsappLink("Olá! Vim pelo site da Disk Marmitinha."), icon: WhatsAppIcon, external: true },
   { label: "Google Maps: unidade Belo Horizonte", href: units[0].mapsUrl, icon: MapPin, external: true },
   { label: `E-mail ${site.email}`, href: `mailto:${site.email}`, icon: Mail, external: false },
 ];
@@ -78,7 +78,13 @@ export function Footer() {
         <div>
           <h2 className="eyebrow text-gold-300">Atendimento</h2>
           <ul className="mt-5 grid gap-2.5 text-[14px]">
-            <li><a href={whatsappLink()} className="hover:text-white">WhatsApp {site.whatsapp.display}</a></li>
+            <li><a href={telLink} className="hover:text-white">Telefone {site.phone.display}</a></li>
+            <li><a href={whatsappLink()} target="_blank" rel="noopener noreferrer" className="hover:text-white">WhatsApp de atendimento</a></li>
+            <li>
+              <a href={whatsappLagoaSantaLink("Olá! Vim pelo site e quero falar com a unidade Lagoa Santa.")} target="_blank" rel="noopener noreferrer" className="hover:text-white">
+                WhatsApp Lagoa Santa <span className="whitespace-nowrap">{site.whatsappLagoaSanta.display}</span>
+              </a>
+            </li>
             <li><a href={`mailto:${site.email}`} className="break-all hover:text-white">{site.email}</a></li>
             {site.hours.map((h) => (
               <li key={h.label} className="text-mist-300">
