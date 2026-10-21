@@ -154,7 +154,8 @@ export function QuoteForm() {
     if (form.phone.replace(/\D/g, "").length < 10) e.phone = "Informe um WhatsApp com DDD.";
     if (form.email && !/^\S+@\S+\.\S+$/.test(form.email)) e.email = "E-mail inválido.";
     const docLen = form.doc.replace(/\D/g, "").length;
-    if (docLen && docLen !== 11 && docLen !== 14) e.doc = "Informe um CPF (11 dígitos) ou CNPJ (14 dígitos).";
+    if (!docLen) e.doc = "Informe seu CPF ou CNPJ.";
+    else if (docLen !== 11 && docLen !== 14) e.doc = "Informe um CPF (11 dígitos) ou CNPJ (14 dígitos).";
     if (form.audience !== "casa" && !form.company.trim()) e.company = "Informe o nome.";
     setErrors(e);
     const first = Object.keys(e)[0];

@@ -35,7 +35,7 @@ export const faqGroups: FaqGroup[] = [
       {
         id: "cadastro",
         q: "Preciso fazer cadastro para pedir orçamento?",
-        a: ["Não. Basta informar seu nome e um WhatsApp para contato. O e-mail é opcional."],
+        a: ["Não. No pedido de orçamento você informa apenas nome, WhatsApp, e-mail e CPF ou CNPJ."],
       },
       {
         id: "item-fora",

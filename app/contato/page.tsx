@@ -44,7 +44,7 @@ export default function ContactPage() {
                   <span>
                     <span className="block text-[13px] font-semibold text-ink-500">{label}</span>
                     {href ? (
-                      <a href={href} className="block break-all text-[18px] font-semibold text-navy-800 hover:underline">
+                      <a href={href} {...(href.startsWith("http") ? { target: "_blank", rel: "noopener noreferrer" } : {})} className="block break-all text-[18px] font-semibold text-navy-800 hover:underline">
                         {value}
                       </a>
                     ) : (

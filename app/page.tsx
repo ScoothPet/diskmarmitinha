@@ -91,7 +91,7 @@ export default function HomePage() {
                 Solicitar orçamento
                 <ArrowRight aria-hidden="true" className="size-4" />
               </Link>
-              <a href={whatsappLink("Olá! Gostaria de um orçamento.")} className="btn-ghost-light">
+              <a target="_blank" rel="noopener noreferrer" href={whatsappLink("Olá! Gostaria de um orçamento.")} className="btn-ghost-light">
                 <WhatsAppIcon className="size-5" />
                 Falar no WhatsApp
               </a>
@@ -299,7 +299,7 @@ export default function HomePage() {
               Começar minha lista
               <ArrowRight aria-hidden="true" className="size-4" />
             </Link>
-            <a href={whatsappLink("Olá! Quero enviar minha lista de compras.")} className="btn-outline">
+            <a target="_blank" rel="noopener noreferrer" href={whatsappLink("Olá! Quero enviar minha lista de compras.")} className="btn-outline">
               Prefiro mandar a lista pelo WhatsApp
             </a>
           </div>
@@ -424,7 +424,7 @@ export default function HomePage() {
               <a href={site.instagram.url} className="btn-light" target="_blank" rel="noopener noreferrer">
                 Seguir {site.instagram.handle}
               </a>
-              <a href={whatsappLink()} className="btn-ghost-light">
+              <a target="_blank" rel="noopener noreferrer" href={whatsappLink()} className="btn-ghost-light">
                 Chamar no WhatsApp
               </a>
             </div>

@@ -124,7 +124,7 @@ export function Header() {
                 <Link href="/orcamento" className="btn-primary">
                   Solicitar orçamento
                 </Link>
-                <a href={whatsappLink()} className="btn-whats">
+                <a target="_blank" rel="noopener noreferrer" href={whatsappLink()} className="btn-whats">
                   <WhatsAppIcon className="size-5" />
                   Falar no WhatsApp
                 </a>

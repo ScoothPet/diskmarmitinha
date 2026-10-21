@@ -46,7 +46,7 @@ export default function HelpPage() {
               <p className="mt-2 text-[15px] text-mist-200">{site.hoursShort}</p>
             </div>
             <div className="flex flex-wrap gap-3">
-              <a href={whatsappLink("Olá! Tenho uma dúvida.")} className="btn-whats">
+              <a target="_blank" rel="noopener noreferrer" href={whatsappLink("Olá! Tenho uma dúvida.")} className="btn-whats">
                 <WhatsAppIcon className="size-5" />
                 Falar no WhatsApp
               </a>
