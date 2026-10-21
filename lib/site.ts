@@ -13,6 +13,10 @@ export const site = {
     handle: "@diskmarmitinha",
     url: "https://www.instagram.com/diskmarmitinha",
   },
+  facebook: {
+    name: "Disk Marmitinha Casa & Estilo",
+    url: "https://www.facebook.com/p/Disk-Marmitinha-Casa-Estilo-100076353576100/",
+  },
   hours: [
     { label: "Segunda a sexta", value: "8h às 18h" },
     { label: "Sábado", value: "8h às 14h" },

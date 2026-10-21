@@ -1,12 +1,13 @@
 import Image from "next/image";
 import Link from "next/link";
 import { categories } from "@/lib/catalog";
-import { Instagram, Mail, MapPin } from "lucide-react";
+import { Facebook, Instagram, Mail, MapPin } from "lucide-react";
 import { site, units, whatsappLink } from "@/lib/site";
 import { WhatsAppIcon } from "./icons";
 
 const socials = [
   { label: "Instagram @diskmarmitinha", href: site.instagram.url, icon: Instagram, external: true },
+  { label: "Facebook Disk Marmitinha Casa & Estilo", href: site.facebook.url, icon: Facebook, external: true },
   { label: "WhatsApp (31) 99840-2889", href: whatsappLink("Olá! Vim pelo site da Disk Marmitinha."), icon: WhatsAppIcon, external: true },
   { label: "Google Maps: unidade Belo Horizonte", href: units[0].mapsUrl, icon: MapPin, external: true },
   { label: `E-mail ${site.email}`, href: `mailto:${site.email}`, icon: Mail, external: false },
