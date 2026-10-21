@@ -69,7 +69,7 @@ export default function HomePage() {
               Embalagens, descartáveis, limpeza, utilidades e decoração com preço de atacarejo. Monte sua lista, peça o orçamento e receba onde estiver ou retire na loja. Frete grátis a partir de R$ 150 em BH e região.
             </p>
 
-            <form action="/catalogo" method="get" role="search" className="mt-9 flex max-w-xl items-center gap-2 rounded-2xl bg-white p-2 shadow-lift">
+            <form action="/catalogo" method="get" role="search" className="mt-9 hidden max-w-xl items-center sm:flex gap-2 rounded-2xl bg-white p-2 shadow-lift">
               <label htmlFor="busca-home" className="sr-only">
                 Buscar produto
               </label>
@@ -86,7 +86,7 @@ export default function HomePage() {
               </button>
             </form>
 
-            <div className="mt-6 flex flex-wrap gap-3">
+            <div className="mt-8 flex flex-wrap gap-3 sm:mt-6">
               <Link href="/orcamento" className="btn-light">
                 Solicitar orçamento
                 <ArrowRight aria-hidden="true" className="size-4" />

@@ -2,9 +2,9 @@
 
 import Image from "next/image";
 import Link from "next/link";
-import { usePathname } from "next/navigation";
-import { useEffect, useState } from "react";
-import { ClipboardList, Menu, Phone, Truck, X } from "lucide-react";
+import { usePathname, useRouter } from "next/navigation";
+import { useEffect, useRef, useState } from "react";
+import { ClipboardList, Menu, Phone, Search, Truck, X } from "lucide-react";
 import { nav, site, telLink, whatsappLagoaSantaLink, whatsappLink } from "@/lib/site";
 import { useQuote } from "./quote-provider";
 import { WhatsAppIcon } from "./icons";
@@ -14,8 +14,26 @@ export function Header() {
   const { totalUnits, ready } = useQuote();
   const [open, setOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
+  const [searchOpen, setSearchOpen] = useState(false);
+  const [query, setQuery] = useState("");
+  const searchRef = useRef<HTMLInputElement>(null);
+  const router = useRouter();
 
-  useEffect(() => setOpen(false), [pathname]);
+  useEffect(() => {
+    setOpen(false);
+    setSearchOpen(false);
+  }, [pathname]);
+
+  useEffect(() => {
+    if (!searchOpen) return;
+    const t = window.setTimeout(() => searchRef.current?.focus(), 120);
+    const onKey = (e: KeyboardEvent) => e.key === "Escape" && setSearchOpen(false);
+    window.addEventListener("keydown", onKey);
+    return () => {
+      window.clearTimeout(t);
+      window.removeEventListener("keydown", onKey);
+    };
+  }, [searchOpen]);
 
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 8);
@@ -36,8 +54,8 @@ export function Header() {
   return (
     <>
       <div className="bg-navy-900 text-[13px] text-mist-200">
-        <div className="container-site flex h-10 items-center justify-between gap-4">
-          <Link href="/ajuda#frete" className="flex min-w-0 items-center gap-2 hover:text-white">
+        <div className="container-site flex h-10 items-center justify-center gap-4 md:justify-between">
+          <Link href="/ajuda#frete" className="flex min-w-0 items-center justify-center gap-2 hover:text-white">
             <Truck aria-hidden="true" className="size-4 shrink-0 text-gold-300" />
             <span className="truncate">
               {site.freeShipping.short}
@@ -89,16 +107,38 @@ export function Header() {
           </nav>
 
           <div className="flex items-center gap-2.5">
-            <Link href="/orcamento" className="btn-primary relative !px-4 whitespace-nowrap sm:!px-5" aria-label={`Minha lista de orçamento, ${count} itens`}>
-              <ClipboardList aria-hidden="true" className="size-[18px]" />
+            <button
+              type="button"
+              onClick={() => {
+                setSearchOpen((v) => !v);
+                setOpen(false);
+              }}
+              aria-expanded={searchOpen}
+              aria-controls="busca-mobile"
+              aria-label={searchOpen ? "Fechar busca" : "Buscar produto"}
+              className="grid size-12 place-items-center rounded-xl border border-mist-300 bg-white text-navy-800 sm:hidden"
+            >
+              {searchOpen ? <X aria-hidden="true" className="size-5" /> : <Search aria-hidden="true" className="size-5" />}
+            </button>
+            <Link
+              href="/orcamento"
+              className="btn relative min-h-12 border border-mist-300 bg-white !px-0 text-navy-800 whitespace-nowrap hover:border-navy-800 max-sm:size-12 sm:!px-5"
+              aria-label={count > 0 ? `Minha lista de orçamento, ${count} itens` : "Minha lista de orçamento"}
+            >
+              <ClipboardList aria-hidden="true" className="size-5 sm:size-[18px]" />
               <span className="hidden sm:inline">Minha lista</span>
-              <span className="grid min-w-6 place-items-center rounded-full bg-white px-1.5 text-[12px] font-bold leading-6 text-navy-800">
-                {count}
-              </span>
+              {count > 0 && (
+                <span className="grid min-w-6 place-items-center rounded-full bg-navy-800 px-1.5 text-[12px] font-bold leading-6 text-white max-sm:absolute max-sm:-top-2 max-sm:-right-2 max-sm:ring-2 max-sm:ring-white">
+                  {count}
+                </span>
+              )}
             </Link>
             <button
               type="button"
-              onClick={() => setOpen((v) => !v)}
+              onClick={() => {
+                setOpen((v) => !v);
+                setSearchOpen(false);
+              }}
               aria-expanded={open}
               aria-controls="menu-mobile"
               aria-label={open ? "Fechar menu" : "Abrir menu"}
@@ -106,6 +146,49 @@ export function Header() {
             >
               {open ? <X aria-hidden="true" className="size-5" /> : <Menu aria-hidden="true" className="size-5" />}
             </button>
+          </div>
+        </div>
+
+        <div
+          id="busca-mobile"
+          className={`grid border-mist-200 bg-white transition-[grid-template-rows,opacity] duration-300 ease-out sm:hidden ${
+            searchOpen ? "grid-rows-[1fr] border-t opacity-100" : "grid-rows-[0fr] opacity-0"
+          }`}
+          inert={!searchOpen}
+        >
+          <div className="overflow-hidden">
+            <form
+              role="search"
+              onSubmit={(e) => {
+                e.preventDefault();
+                const q = query.trim();
+                setSearchOpen(false);
+                router.push(q ? `/catalogo?q=${encodeURIComponent(q)}` : "/catalogo");
+              }}
+              className={`container-site flex items-center gap-2 py-3 transition-transform duration-300 ease-out ${
+                searchOpen ? "translate-y-0" : "-translate-y-2"
+              }`}
+            >
+              <label htmlFor="busca-header" className="sr-only">
+                Buscar produto
+              </label>
+              <div className="relative min-w-0 flex-1">
+                <Search aria-hidden="true" className="pointer-events-none absolute top-1/2 left-4 size-5 -translate-y-1/2 text-ink-500" />
+                <input
+                  ref={searchRef}
+                  id="busca-header"
+                  type="search"
+                  enterKeyHint="search"
+                  value={query}
+                  onChange={(e) => setQuery(e.target.value)}
+                  placeholder="O que você procura?"
+                  className="field !pl-12"
+                />
+              </div>
+              <button type="submit" className="btn-primary shrink-0 !px-5">
+                Buscar
+              </button>
+            </form>
           </div>
         </div>
 
