@@ -3,11 +3,12 @@
 import Image from "next/image";
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
-import { useEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import { ClipboardList, Menu, Phone, Search, Truck, UserRound, X } from "lucide-react";
 import { nav, site, telLink, whatsappLagoaSantaLink, whatsappLink } from "@/lib/site";
 import { useQuote } from "./quote-provider";
 import { WhatsAppIcon } from "./icons";
+import { ListDrawer } from "./list-drawer";
 
 export function Header() {
   const pathname = usePathname();
@@ -15,6 +16,7 @@ export function Header() {
   const [open, setOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
   const [searchOpen, setSearchOpen] = useState(false);
+  const [listOpen, setListOpen] = useState(false);
   const [query, setQuery] = useState("");
   const searchRef = useRef<HTMLInputElement>(null);
   const router = useRouter();
@@ -22,6 +24,7 @@ export function Header() {
   useEffect(() => {
     setOpen(false);
     setSearchOpen(false);
+    setListOpen(false);
   }, [pathname]);
 
   useEffect(() => {
@@ -43,13 +46,15 @@ export function Header() {
   }, []);
 
   useEffect(() => {
-    document.body.style.overflow = open ? "hidden" : "";
+    if (!open) return;
+    document.body.style.overflow = "hidden";
     return () => {
       document.body.style.overflow = "";
     };
   }, [open]);
 
   const count = ready ? totalUnits : 0;
+  const closeList = useCallback(() => setListOpen(false), []);
 
   return (
     <>
@@ -78,7 +83,7 @@ export function Header() {
       >
         <div className="container-site grid h-[80px] grid-cols-[minmax(0,1fr)_auto_minmax(0,1fr)] items-center gap-1.5 sm:flex sm:h-[90px] sm:justify-between sm:gap-5 lg:h-[96px]">
           {/* Celular: menu à esquerda */}
-          <div className="flex items-center sm:hidden">
+          <div className="flex items-center gap-0.5 sm:hidden">
             <button
               type="button"
               onClick={() => {
@@ -91,6 +96,19 @@ export function Header() {
               className="-ml-2 grid size-10 place-items-center text-navy-800"
             >
               {open ? <X aria-hidden="true" className="size-6" /> : <Menu aria-hidden="true" className="size-6" />}
+            </button>
+            <button
+              type="button"
+              onClick={() => {
+                setSearchOpen((v) => !v);
+                setOpen(false);
+              }}
+              aria-expanded={searchOpen}
+              aria-controls="busca-mobile"
+              aria-label={searchOpen ? "Fechar busca" : "Buscar produto"}
+              className="grid size-10 place-items-center text-navy-800 max-[379px]:size-9 sm:hidden"
+            >
+              {searchOpen ? <X aria-hidden="true" className="size-6" /> : <Search aria-hidden="true" className="size-6" />}
             </button>
           </div>
 
@@ -124,19 +142,6 @@ export function Header() {
           </nav>
 
           <div className="flex items-center justify-end sm:gap-2.5">
-            <button
-              type="button"
-              onClick={() => {
-                setSearchOpen((v) => !v);
-                setOpen(false);
-              }}
-              aria-expanded={searchOpen}
-              aria-controls="busca-mobile"
-              aria-label={searchOpen ? "Fechar busca" : "Buscar produto"}
-              className="grid size-10 place-items-center text-navy-800 max-[379px]:size-9 sm:hidden"
-            >
-              {searchOpen ? <X aria-hidden="true" className="size-6" /> : <Search aria-hidden="true" className="size-6" />}
-            </button>
             <Link
               href="/entrar"
               aria-label="Entrar ou cadastrar-se"
@@ -147,8 +152,14 @@ export function Header() {
                 <span className="hidden lg:inline">Entrar/Cadastre-se</span>
               </span>
             </Link>
-            <Link
-              href="/orcamento"
+            <button
+              type="button"
+              onClick={() => {
+                setListOpen(true);
+                setOpen(false);
+                setSearchOpen(false);
+              }}
+              aria-haspopup="dialog"
               className="relative grid size-10 place-items-center text-navy-800 max-[379px]:size-9 sm:btn sm:size-auto sm:min-h-12 sm:border sm:border-mist-300 sm:bg-white sm:!px-4 sm:whitespace-nowrap sm:hover:border-navy-800"
               aria-label={count > 0 ? `Minha lista de orçamento, ${count} itens` : "Minha lista de orçamento"}
             >
@@ -161,7 +172,7 @@ export function Header() {
                   </span>
                 )}
               </span>
-            </Link>
+            </button>
             {/* Tablet: menu à direita, com contorno */}
             <button
               type="button"
@@ -262,6 +273,7 @@ export function Header() {
           </div>
         )}
       </header>
+      <ListDrawer open={listOpen} onClose={closeList} />
     </>
   );
 }
