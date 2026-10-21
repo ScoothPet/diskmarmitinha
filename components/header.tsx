@@ -4,7 +4,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
 import { useEffect, useRef, useState } from "react";
-import { ClipboardList, Menu, Phone, Search, Truck, X } from "lucide-react";
+import { ClipboardList, Menu, Phone, Search, Truck, UserRound, X } from "lucide-react";
 import { nav, site, telLink, whatsappLagoaSantaLink, whatsappLink } from "@/lib/site";
 import { useQuote } from "./quote-provider";
 import { WhatsAppIcon } from "./icons";
@@ -76,19 +76,36 @@ export function Header() {
           scrolled ? "border-mist-200 shadow-soft" : "border-transparent"
         }`}
       >
-        <div className="container-site flex h-[80px] items-center sm:h-[90px] lg:h-[96px] justify-between gap-6">
-          <Link href="/" aria-label="Disk Marmitinha Casa & Estilo, página inicial" className="shrink-0">
+        <div className="container-site grid h-[80px] grid-cols-[minmax(0,1fr)_auto_minmax(0,1fr)] items-center gap-1.5 sm:flex sm:h-[90px] sm:justify-between sm:gap-5 lg:h-[96px]">
+          {/* Celular: menu à esquerda */}
+          <div className="flex items-center sm:hidden">
+            <button
+              type="button"
+              onClick={() => {
+                setOpen((v) => !v);
+                setSearchOpen(false);
+              }}
+              aria-expanded={open}
+              aria-controls="menu-mobile"
+              aria-label={open ? "Fechar menu" : "Abrir menu"}
+              className="-ml-2 grid size-10 place-items-center text-navy-800"
+            >
+              {open ? <X aria-hidden="true" className="size-6" /> : <Menu aria-hidden="true" className="size-6" />}
+            </button>
+          </div>
+
+          <Link href="/" aria-label="Disk Marmitinha Casa & Estilo, página inicial" className="shrink-0 justify-self-center">
             <Image
               src="/images/logo-disk-marmitinha-vertical.svg"
               alt="Disk Marmitinha casa & estilo"
               width={1267}
               height={480}
               priority
-              className="h-[52px] w-auto sm:h-[60px] lg:h-[66px]"
+              className="h-[42px] w-auto sm:h-[60px] lg:h-[66px]"
             />
           </Link>
 
-          <nav aria-label="Principal" className="hidden items-center gap-7 xl:flex">
+          <nav aria-label="Principal" className="hidden items-center gap-4 whitespace-nowrap xl:flex 2xl:gap-7">
             {nav.map((item) => {
               const active = pathname === item.href || pathname.startsWith(item.href + "/");
               return (
@@ -106,7 +123,7 @@ export function Header() {
             })}
           </nav>
 
-          <div className="flex items-center gap-2.5">
+          <div className="flex items-center justify-end sm:gap-2.5">
             <button
               type="button"
               onClick={() => {
@@ -116,23 +133,36 @@ export function Header() {
               aria-expanded={searchOpen}
               aria-controls="busca-mobile"
               aria-label={searchOpen ? "Fechar busca" : "Buscar produto"}
-              className="grid size-12 place-items-center rounded-xl border border-mist-300 bg-white text-navy-800 sm:hidden"
+              className="grid size-10 place-items-center text-navy-800 max-[379px]:size-9 sm:hidden"
             >
-              {searchOpen ? <X aria-hidden="true" className="size-5" /> : <Search aria-hidden="true" className="size-5" />}
+              {searchOpen ? <X aria-hidden="true" className="size-6" /> : <Search aria-hidden="true" className="size-6" />}
             </button>
             <Link
+              href="/entrar"
+              aria-label="Entrar ou cadastrar-se"
+              className="grid size-10 place-items-center text-navy-800 max-[379px]:size-9 sm:btn sm:size-auto sm:min-h-12 sm:border sm:border-mist-300 sm:bg-white sm:!px-4 sm:whitespace-nowrap sm:hover:border-navy-800"
+            >
+              <span className="flex items-center gap-2.5">
+                <UserRound aria-hidden="true" className="size-6 sm:size-[18px]" />
+                <span className="hidden lg:inline">Entrar/Cadastre-se</span>
+              </span>
+            </Link>
+            <Link
               href="/orcamento"
-              className="btn relative min-h-12 border border-mist-300 bg-white !px-0 text-navy-800 whitespace-nowrap hover:border-navy-800 max-sm:size-12 sm:!px-5"
+              className="relative grid size-10 place-items-center text-navy-800 max-[379px]:size-9 sm:btn sm:size-auto sm:min-h-12 sm:border sm:border-mist-300 sm:bg-white sm:!px-4 sm:whitespace-nowrap sm:hover:border-navy-800"
               aria-label={count > 0 ? `Minha lista de orçamento, ${count} itens` : "Minha lista de orçamento"}
             >
-              <ClipboardList aria-hidden="true" className="size-5 sm:size-[18px]" />
-              <span className="hidden sm:inline">Minha lista</span>
-              {count > 0 && (
-                <span className="grid min-w-6 place-items-center rounded-full bg-navy-800 px-1.5 text-[12px] font-bold leading-6 text-white max-sm:absolute max-sm:-top-2 max-sm:-right-2 max-sm:ring-2 max-sm:ring-white">
-                  {count}
-                </span>
-              )}
+              <span className="flex items-center gap-2.5">
+                <ClipboardList aria-hidden="true" className="size-6 sm:size-[18px]" />
+                <span className="hidden sm:inline">Minha lista</span>
+                {count > 0 && (
+                  <span className="grid min-w-5 place-items-center rounded-full bg-navy-800 px-1 text-[11px] font-bold leading-5 text-white max-sm:absolute max-sm:top-0.5 max-sm:right-0 max-sm:ring-2 max-sm:ring-white sm:min-w-6 sm:px-1.5 sm:text-[12px] sm:leading-6">
+                    {count}
+                  </span>
+                )}
+              </span>
             </Link>
+            {/* Tablet: menu à direita, com contorno */}
             <button
               type="button"
               onClick={() => {
@@ -142,7 +172,7 @@ export function Header() {
               aria-expanded={open}
               aria-controls="menu-mobile"
               aria-label={open ? "Fechar menu" : "Abrir menu"}
-              className="grid size-12 place-items-center rounded-xl border border-mist-300 text-navy-800 xl:hidden"
+              className="hidden size-12 place-items-center rounded-xl border border-mist-300 text-navy-800 sm:grid xl:hidden"
             >
               {open ? <X aria-hidden="true" className="size-5" /> : <Menu aria-hidden="true" className="size-5" />}
             </button>
