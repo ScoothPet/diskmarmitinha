@@ -3,11 +3,11 @@ import { categories } from "@/lib/catalog";
 import { allProductSlugs } from "@/lib/catalog-server";
 import { site } from "@/lib/site";
 
-export default function sitemap(): MetadataRoute.Sitemap {
+export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const pages = ["", "/catalogo", "/orcamento", "/empresas", "/quem-somos", "/unidades", "/ajuda", "/contato"];
   return [
     ...pages.map((p) => ({ url: `${site.url}${p}`, changeFrequency: "weekly" as const, priority: p === "" ? 1 : 0.7 })),
     ...categories.map((c) => ({ url: `${site.url}/catalogo/${c.slug}`, changeFrequency: "weekly" as const, priority: 0.6 })),
-    ...allProductSlugs().map((s) => ({ url: `${site.url}/produto/${s}`, changeFrequency: "monthly" as const, priority: 0.4 })),
+    ...(await allProductSlugs()).map((s) => ({ url: `${site.url}/produto/${s}`, changeFrequency: "monthly" as const, priority: 0.4 })),
   ];
 }

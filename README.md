@@ -10,25 +10,17 @@ Site institucional com catálogo e fluxo de orçamento (sem venda online), feito
 
 ## Dados
 - `lib/site.ts` — telefone, e-mail, horários, unidades, links
-- `data/catalogo/produtos.json` e `categorias.json` — catálogo real (6.942 produtos das duas lojas), gerado a partir das listas da Querino
+- `data/catalogo/produtos.json` e `categorias.json` — catálogo inicial embutido no site
 - `lib/catalog.ts` — categorias (textos, imagens, ícones) e tipos; seguro para o navegador
-- `lib/catalog-server.ts` — leitura dos produtos e busca (só no servidor); `/api/catalogo` atende a busca do catálogo
+- `lib/catalog-server.ts` — leitura do catálogo vigente (Vercel Blob ou o embutido) e busca, só no servidor; `/api/catalogo` atende a busca
 - `/produto/[slug]` — página de cada produto (gerada na primeira visita e guardada em cache)
 
 ## Atualizar o catálogo
-Com as listas novas da Querino (`lista-produtos-BH.csv` e `lista-produtos-LS.csv`, que **não** vão para o repositório):
-```bash
-pip install pandas
-python3 scripts/catalogo/gerar_site.py caminho/lista-produtos-BH.csv caminho/lista-produtos-LS.csv
-```
-Entram produtos com preço > 0, estoque > 0 e não "FORA DE LINHA" em pelo menos uma unidade. As regras de categoria ficam em `scripts/catalogo/classificar.py` e `scripts/catalogo/regras_ajuste.py`; nomes e descrições para o cliente são gerados em `scripts/catalogo/gerar_site.py`. Nada disso altera o sistema da Querino.
+Toda semana, exporte do VendasPCP o cadastro de produtos de **Belo Horizonte** e de **Lagoa Santa** e envie os dois arquivos em **/admin/catalogo** (senha na variável `ADMIN_CATALOGO_SENHA` da Vercel). O navegador lê as listas, manda ao site só se cada produto está à venda em cada loja (preço e estoque não saem do computador), e o site gera nomes, descrições e categorias e publica no Vercel Blob. Não precisa de deploy.
 
-## Variáveis de ambiente
-- `NEXT_PUBLIC_SITE_URL` — URL pública (padrão `https://diskmarmitinha.com.br`)
-- `NEXT_PUBLIC_INDEXABLE=true` — libera indexação por buscadores (deixe desligado nos links de teste)
+- Entram produtos com preço > 0, estoque > 0 e não "FORA DE LINHA" em pelo menos uma loja.
+- Regras de categoria, abreviações e textos: `lib/catalog-build/build.ts` e `lib/catalog-build/regras.ts`.
+- Produtos que não se encaixam em nenhuma categoria aparecem no resumo do envio para revisão.
+- O catálogo embutido em `data/catalogo` só é usado enquanto nenhum foi publicado pela página. Para regerá-lo: `npx tsx scripts/catalogo/gerar.ts lista-BH.csv lista-LS.csv`.
 
-## Rodar localmente
-```bash
-npm install
-npm run dev
-```
+Nada disso altera o sistema da Querino.

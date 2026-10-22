@@ -1,5 +1,3 @@
-import categoriasGeradas from "@/data/catalogo/categorias.json";
-
 export type IconKey =
   | "embalagens-e-descartaveis"
   | "utensilios-de-cozinha"
@@ -15,7 +13,7 @@ export type IconKey =
   | "lazer-infantil-e-pet"
   | "natal";
 
-export type Subcategory = { slug: string; name: string; total: number };
+export type Subcategory = { slug: string; name: string };
 
 export type Category = {
   slug: string;
@@ -23,8 +21,6 @@ export type Category = {
   description: string;
   icon: IconKey;
   image?: string;
-  total: number;
-  subcategories: Subcategory[];
 };
 
 /** Produto como aparece em listas e cards (sem descrição longa nem índice de busca). */
@@ -34,6 +30,7 @@ export type ProductSummary = {
   name: string;
   category: string;
   subcategory: string;
+  subcategoryName: string;
   spec: string;
 };
 
@@ -90,24 +87,32 @@ const textos: Record<string, { description: string; image?: string }> = {
   },
 };
 
-export const categories: Category[] = categoriasGeradas.map((c) => ({
-  slug: c.slug,
-  name: c.nome,
-  description: textos[c.slug]?.description ?? "",
-  image: textos[c.slug]?.image,
-  icon: c.slug as IconKey,
-  total: c.total,
-  subcategories: c.subcategorias.map((s) => ({ slug: s.slug, name: s.nome, total: s.total })),
-}));
+const ORDEM: [string, string][] = [
+  ["embalagens-e-descartaveis", "Embalagens e Descartáveis"],
+  ["utensilios-de-cozinha", "Utensílios de Cozinha"],
+  ["panelas", "Panelas"],
+  ["organizacao", "Organização"],
+  ["limpeza-e-higiene", "Limpeza e Higiene"],
+  ["mesa-posta", "Mesa Posta"],
+  ["decoracao", "Decoração"],
+  ["linha-industrial", "Linha Industrial"],
+  ["jardinagem", "Jardinagem"],
+  ["casa-e-ferramentas", "Casa e Ferramentas"],
+  ["cama-mesa-e-banho", "Cama, Mesa e Banho"],
+  ["lazer-infantil-e-pet", "Lazer, Infantil e Pet"],
+  ["natal", "Natal"],
+];
 
-export const totalProducts = categories.reduce((sum, c) => sum + c.total, 0);
+export const categories: Category[] = ORDEM.map(([slug, name]) => ({
+  slug,
+  name,
+  description: textos[slug]?.description ?? "",
+  image: textos[slug]?.image,
+  icon: slug as IconKey,
+}));
 
 export function getCategory(slug: string) {
   return categories.find((c) => c.slug === slug);
-}
-
-export function getSubcategory(category: string, slug: string) {
-  return getCategory(category)?.subcategories.find((s) => s.slug === slug);
 }
 
 export function normalize(text: string) {
@@ -116,4 +121,4 @@ export function normalize(text: string) {
 
 export const PAGE_SIZE = 24;
 
-export type SearchResult = { items: ProductSummary[]; total: number; page: number; pageSize: number; approximate: boolean };
+export type SearchResult = { items: ProductSummary[]; total: number; page: number; pages: number; pageSize: number; approximate: boolean };

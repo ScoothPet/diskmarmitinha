@@ -17,18 +17,18 @@ export function generateStaticParams() {
 
 export async function generateMetadata({ params }: { params: Promise<{ slug: string }> }): Promise<Metadata> {
   const { slug } = await params;
-  const product = getProductBySlug(slug);
+  const product = await getProductBySlug(slug);
   if (!product) return {};
   return { title: product.name, description: product.description.slice(0, 160) };
 }
 
 export default async function ProductPage({ params }: { params: Promise<{ slug: string }> }) {
   const { slug } = await params;
-  const product = getProductBySlug(slug);
+  const product = await getProductBySlug(slug);
   if (!product) notFound();
   const category = getCategory(product.category);
-  const sub = category?.subcategories.find((s) => s.slug === product.subcategory);
-  const related = relatedProducts(product);
+  const sub = product.subcategoryName ? { slug: product.subcategory, name: product.subcategoryName } : undefined;
+  const related = await relatedProducts(product);
 
   return (
     <>

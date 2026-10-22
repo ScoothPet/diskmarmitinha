@@ -1,10 +1,16 @@
-// Só para código de servidor (páginas, rotas de API). Lê data/catalogo/produtos.json,
-// gerado por scripts/catalogo/gerar_site.py a partir das listas da Querino.
+// Só para código de servidor (páginas, rotas de API).
+// O catálogo vigente fica no Vercel Blob (publicado pela página /admin/catalogo). Se ainda não houver
+// nenhum publicado, usa o catálogo embutido em data/catalogo (gerado por scripts/catalogo/gerar.ts).
 import fs from "node:fs";
 import path from "node:path";
-import { normalize, PAGE_SIZE, type Product, type ProductSummary, type SearchResult } from "./catalog";
+import { list as listBlobs } from "@vercel/blob";
+import { unstable_cache } from "next/cache";
+import { normalize, PAGE_SIZE, type Product, type ProductSummary, type SearchResult, type Subcategory } from "./catalog";
+import type { CategoriaSite, ProdutoSite } from "./catalog-build/build";
 
-type Raw = { id: string; s: string; n: string; c: string; sc: string; d: string; r: string; e: [string, string][]; k: string };
+type Raw = ProdutoSite;
+export const CATALOGO_PREFIXO = "catalogo/versoes/";
+export const CATALOGO_TAG = "catalogo";
 
 type Indexed = {
   raw: Raw;
@@ -13,7 +19,16 @@ type Indexed = {
   words: string[];
 };
 
-let cache: { list: Indexed[]; bySlug: Map<string, Indexed>; byId: Map<string, Indexed> } | null = null;
+type Loaded = {
+  key: string;
+  list: Indexed[];
+  bySlug: Map<string, Indexed>;
+  byId: Map<string, Indexed>;
+  subs: Map<string, Subcategory[]>;
+  subName: Map<string, string>;
+};
+let cache: Loaded | null = null;
+let loading: Promise<Loaded> | null = null;
 
 function stem(w: string) {
   if (w.length > 4 && w.endsWith("oes")) return w.slice(0, -3) + "ao";
@@ -36,31 +51,72 @@ function tokens(text: string) {
   return out;
 }
 
-function load() {
-  if (cache) return cache;
-  const file = path.join(process.cwd(), "data", "catalogo", "produtos.json");
-  const data = JSON.parse(fs.readFileSync(file, "utf8")) as Raw[];
-  const list = data.map<Indexed>((raw, order) => ({
+/** Endereço da versão mais recente publicada no Blob (guardado em cache até a próxima publicação). */
+const versaoAtual = unstable_cache(
+  async (): Promise<string | null> => {
+    if (!process.env.BLOB_READ_WRITE_TOKEN) return null;
+    try {
+      const { blobs } = await listBlobs({ prefix: CATALOGO_PREFIXO, limit: 1000 });
+      if (!blobs.length) return null;
+      blobs.sort((a, b) => +new Date(b.uploadedAt) - +new Date(a.uploadedAt));
+      return blobs[0].url;
+    } catch {
+      return null;
+    }
+  },
+  ["catalogo-versao-atual"],
+  { tags: [CATALOGO_TAG], revalidate: 3600 },
+);
+
+function index(produtos: Raw[], categorias: CategoriaSite[], key: string): Loaded {
+  const list = produtos.map<Indexed>((raw, order) => ({
     raw,
     order,
     nameWords: Array.from(new Set(tokens(raw.n))),
     words: Array.from(new Set(tokens(`${raw.n} ${raw.k}`))),
   }));
-  cache = {
-    list,
-    bySlug: new Map(list.map((p) => [p.raw.s, p])),
-    byId: new Map(list.map((p) => [p.raw.id, p])),
-  };
+  const subs = new Map(categorias.map((c) => [c.slug, c.subcategorias.map((s) => ({ slug: s.slug, name: s.nome }))]));
+  const subName = new Map(categorias.flatMap((c) => c.subcategorias.map((s) => [`${c.slug}/${s.slug}`, s.nome] as [string, string])));
+  return { key, list, subs, subName, bySlug: new Map(list.map((p) => [p.raw.s, p])), byId: new Map(list.map((p) => [p.raw.id, p])) };
+}
+
+function embutido(): Loaded {
+  const dir = path.join(process.cwd(), "data", "catalogo");
+  const produtos = JSON.parse(fs.readFileSync(path.join(dir, "produtos.json"), "utf8")) as Raw[];
+  const categorias = JSON.parse(fs.readFileSync(path.join(dir, "categorias.json"), "utf8")) as CategoriaSite[];
+  return index(produtos, categorias, "embutido");
+}
+
+async function load(): Promise<Loaded> {
+  const url = (await versaoAtual()) ?? "embutido";
+  if (cache?.key === url) return cache;
+  if (!loading) {
+    loading = (async () => {
+      try {
+        if (url === "embutido") return embutido();
+        const res = await fetch(url, { cache: "no-store" });
+        if (!res.ok) throw new Error(`Blob ${res.status}`);
+        const data = (await res.json()) as { produtos: Raw[]; categorias: CategoriaSite[] };
+        return index(data.produtos, data.categorias, url);
+      } catch (e) {
+        console.error("Falha ao carregar o catálogo publicado; usando o embutido", e);
+        return cache ?? embutido();
+      }
+    })().finally(() => {
+      loading = null;
+    });
+  }
+  cache = await loading;
   return cache;
 }
 
-function summary(p: Indexed): ProductSummary {
+function summary(p: Indexed, l: Loaded): ProductSummary {
   const r = p.raw;
-  return { id: r.id, slug: r.s, name: r.n, category: r.c, subcategory: r.sc, spec: r.r };
+  return { id: r.id, slug: r.s, name: r.n, category: r.c, subcategory: r.sc, subcategoryName: l.subName.get(`${r.c}/${r.sc}`) ?? "", spec: r.r };
 }
 
-function full(p: Indexed): Product {
-  return { ...summary(p), description: p.raw.d, specs: p.raw.e };
+function full(p: Indexed, l: Loaded): Product {
+  return { ...summary(p, l), description: p.raw.d, specs: p.raw.e };
 }
 
 // Termos que o cliente digita e como eles aparecem nos cadastros (já normalizados e no singular)
@@ -140,7 +196,7 @@ function matchWord(words: string[], alts: string[], fuzzy: boolean) {
   return false;
 }
 
-export function searchProducts({
+export async function searchProducts({
   q = "",
   category,
   subcategory,
@@ -152,8 +208,9 @@ export function searchProducts({
   subcategory?: string;
   page?: number;
   pageSize?: number;
-}): SearchResult {
-  const { list, byId } = load();
+}): Promise<SearchResult> {
+  const l = await load();
+  const { list, byId } = l;
   let pool = list;
   if (category) pool = pool.filter((p) => p.raw.c === category);
   if (subcategory) pool = pool.filter((p) => p.raw.sc === subcategory);
@@ -204,29 +261,44 @@ export function searchProducts({
     if (exact && (!category || exact.raw.c === category)) ranked = [exact, ...ranked.filter((p) => p !== exact)];
   }
 
-  const start = (Math.max(1, page) - 1) * pageSize;
+  const pages = Math.max(1, Math.ceil(ranked.length / pageSize));
+  const atual = Math.min(Math.max(1, page), pages);
+  const start = (atual - 1) * pageSize;
   return {
-    items: ranked.slice(start, start + pageSize).map(summary),
+    items: ranked.slice(start, start + pageSize).map((p) => summary(p, l)),
     total: ranked.length,
-    page: Math.max(1, page),
+    page: atual,
+    pages,
     pageSize,
     approximate,
   };
 }
 
-export function getProductBySlug(slug: string): Product | undefined {
-  const p = load().bySlug.get(slug);
-  return p && full(p);
+export async function getProductBySlug(slug: string): Promise<Product | undefined> {
+  const l = await load();
+  const p = l.bySlug.get(slug);
+  return p && full(p, l);
 }
 
-export function relatedProducts(product: Product, limit = 8): ProductSummary[] {
-  const { list } = load();
-  const same = list.filter((p) => p.raw.sc === product.subcategory && p.raw.c === product.category && p.raw.id !== product.id);
+export async function relatedProducts(product: Product, limit = 8): Promise<ProductSummary[]> {
+  const l = await load();
+  const same = l.list.filter((p) => p.raw.sc === product.subcategory && p.raw.c === product.category && p.raw.id !== product.id);
   const first = tokens(product.name)[0];
   same.sort((a, b) => Number(b.nameWords[0] === first) - Number(a.nameWords[0] === first) || a.order - b.order);
-  return same.slice(0, limit).map(summary);
+  return same.slice(0, limit).map((p) => summary(p, l));
 }
 
-export function allProductSlugs() {
-  return load().list.map((p) => p.raw.s);
+export async function allProductSlugs() {
+  return (await load()).list.map((p) => p.raw.s);
+}
+
+/** Subcategorias com produtos no catálogo vigente. */
+export async function subcategoriesOf(category: string): Promise<Subcategory[]> {
+  return (await load()).subs.get(category) ?? [];
+}
+
+/** Ids e versão do catálogo vigente (usado para mostrar o que mudou numa nova publicação). */
+export async function currentCatalogInfo() {
+  const l = await load();
+  return { versao: l.key, ids: new Set(l.list.map((p) => p.raw.id)), total: l.list.length };
 }

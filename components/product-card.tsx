@@ -5,7 +5,6 @@ import { AddToList } from "./add-to-list";
 
 export function ProductCard({ product }: { product: ProductSummary }) {
   const category = getCategory(product.category);
-  const sub = category?.subcategories.find((s) => s.slug === product.subcategory);
   const href = `/produto/${product.slug}`;
 
   return (
@@ -18,8 +17,8 @@ export function ProductCard({ product }: { product: ProductSummary }) {
       >
         {category && <CategoryIcon icon={category.icon} className="size-9 text-navy-800/60 sm:size-12" />}
       </Link>
-      {sub && (
-        <p className="eyebrow mt-3 !text-[10px] !tracking-[0.12em] text-ink-500 sm:mt-4 sm:!text-[11px]">{sub.name}</p>
+      {product.subcategoryName && (
+        <p className="eyebrow mt-3 !text-[10px] !tracking-[0.12em] text-ink-500 sm:mt-4 sm:!text-[11px]">{product.subcategoryName}</p>
       )}
       <h3 className="mt-1.5 font-display text-[16px] leading-snug font-semibold text-navy-800 sm:text-[19px]">
         <Link href={href} className="hover:underline">
