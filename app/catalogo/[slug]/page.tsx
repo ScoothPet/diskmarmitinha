@@ -52,7 +52,7 @@ export default async function CategoryPage({
           </div>
           {category.image && (
             <div className="relative hidden aspect-[4/3] overflow-hidden rounded-3xl lg:block">
-              <Image src={category.image} alt="" fill sizes="420px" className="object-cover" priority />
+              <Image src={category.image} alt="" fill sizes="420px" className="object-cover" />
             </div>
           )}
         </div>

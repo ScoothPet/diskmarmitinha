@@ -59,6 +59,7 @@ export function CatalogBrowser({
       return;
     }
     const id = ++reqId.current;
+    const ctrl = new AbortController();
     setLoading(true);
     const t = window.setTimeout(
       async () => {
@@ -68,7 +69,7 @@ export function CatalogBrowser({
         if (sub) sp.set("sub", sub);
         if (page > 1) sp.set("pagina", String(page));
         try {
-          const res = await fetch(`/api/catalogo?${sp}`);
+          const res = await fetch(`/api/catalogo?${sp}`, { signal: ctrl.signal });
           const json = (await res.json()) as SearchResult;
           if (id !== reqId.current) return;
           setData(json);
@@ -81,6 +82,7 @@ export function CatalogBrowser({
         } finally {
           if (id === reqId.current) setLoading(false);
         }
+        if (ctrl.signal.aborted) return;
         // Mantém busca, linha e página no endereço, para compartilhar ou voltar
         sp.delete("categoria");
         const qs = sp.toString();
@@ -88,7 +90,10 @@ export function CatalogBrowser({
       },
       scrollOnLoad.current ? 0 : 220,
     );
-    return () => window.clearTimeout(t);
+    return () => {
+      window.clearTimeout(t);
+      ctrl.abort(); // cancela a busca anterior enquanto a pessoa digita
+    };
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [query, sub, page]);
 

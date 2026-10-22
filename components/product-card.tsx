@@ -11,6 +11,7 @@ export function ProductCard({ product }: { product: ProductSummary }) {
     <article className="flex h-full flex-col rounded-2xl border border-mist-200 bg-white p-3 transition-shadow hover:shadow-soft sm:p-5">
       <Link
         href={href}
+        prefetch={false}
         tabIndex={-1}
         aria-hidden="true"
         className="relative grid aspect-[4/3] place-items-center overflow-hidden rounded-xl bg-gradient-to-br from-mist-50 to-mist-100"
@@ -21,7 +22,7 @@ export function ProductCard({ product }: { product: ProductSummary }) {
         <p className="eyebrow mt-3 !text-[10px] !tracking-[0.12em] text-ink-500 sm:mt-4 sm:!text-[11px]">{product.subcategoryName}</p>
       )}
       <h3 className="mt-1.5 font-display text-[16px] leading-snug font-semibold text-navy-800 sm:text-[19px]">
-        <Link href={href} className="hover:underline">
+        <Link href={href} prefetch={false} className="hover:underline">
           {product.name}
         </Link>
       </h3>
