@@ -1,7 +1,8 @@
 "use client";
 
 import Link from "next/link";
-import { useEffect, useRef, useState } from "react";
+import { Suspense, useEffect, useRef, useState } from "react";
+import { useSearchParams } from "next/navigation";
 import { ChevronLeft, ChevronRight, Loader2, Search, X } from "lucide-react";
 import { categories, getCategory, type ProductSummary, type SearchResult, type Subcategory } from "@/lib/catalog";
 import { ProductCard } from "./product-card";
@@ -19,19 +20,30 @@ function pageList(page: number, pages: number): (number | "…")[] {
   return out;
 }
 
-export function CatalogBrowser({
-  category,
-  subcategories = [],
-  initial,
-  initialQuery = "",
-  initialSub = "",
-}: {
-  category?: string;
-  subcategories?: Subcategory[];
-  initial: SearchResult;
-  initialQuery?: string;
-  initialSub?: string;
-}) {
+type Props = { category?: string; subcategories?: Subcategory[]; initial: SearchResult };
+type UrlState = { q: string; sub: string; page: number } | null;
+
+/**
+ * A página chega pronta (em cache) com a primeira página de produtos. Busca, linha e página
+ * vêm do endereço (?q=, ?sub=, ?pagina=) e são consultadas na API depois de carregar.
+ */
+export function CatalogBrowser(props: Props) {
+  return (
+    <Suspense fallback={<Browser {...props} url={null} />}>
+      <WithUrl {...props} />
+    </Suspense>
+  );
+}
+
+function WithUrl(props: Props) {
+  const sp = useSearchParams();
+  const url = { q: sp.get("q") ?? "", sub: sp.get("sub") ?? "", page: Math.max(1, Number(sp.get("pagina")) || 1) };
+  return <Browser {...props} url={url} />;
+}
+
+function Browser({ category, subcategories = [], initial, url }: Props & { url: UrlState }) {
+  const initialQuery = "";
+  const initialSub = "";
   const current = category ? getCategory(category) : undefined;
   const [query, setQuery] = useState(initialQuery);
   const [sub, setSub] = useState(initialSub);
@@ -42,6 +54,18 @@ export function CatalogBrowser({
   const first = useRef(true);
   const reqId = useRef(0);
   const scrollOnLoad = useRef(false);
+
+  // Endereço mudou (abriu com ?q=, voltou no navegador, buscou pelo cabeçalho): acompanha
+  const urlKey = url ? `${url.q}|${url.sub}|${url.page}` : "";
+  useEffect(() => {
+    if (!url) return;
+    if (url.q === query && url.sub === sub && url.page === page) return;
+    lastFilters.current = `${url.q}|${url.sub}`;
+    setQuery(url.q);
+    setSub(url.sub);
+    setPage(url.page);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [urlKey]);
 
   // Busca e filtros voltam para a página 1
   const lastFilters = useRef(`${initialQuery}|${initialSub}`);

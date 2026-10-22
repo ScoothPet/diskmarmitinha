@@ -1,5 +1,6 @@
 import type { Metadata, Viewport } from "next";
 import localFont from "next/font/local";
+import { SpeedInsights } from "@vercel/speed-insights/next";
 import "./globals.css";
 import { Header } from "@/components/header";
 import { Footer } from "@/components/footer";
@@ -16,8 +17,6 @@ const montserrat = localFont({
 const barlow = localFont({
   src: [
     { path: "./fonts/barlow-semi-condensed-latin-300-normal.woff2", weight: "300" },
-    { path: "./fonts/barlow-semi-condensed-latin-400-normal.woff2", weight: "400" },
-    { path: "./fonts/barlow-semi-condensed-latin-500-normal.woff2", weight: "500" },
     { path: "./fonts/barlow-semi-condensed-latin-600-normal.woff2", weight: "600" },
     { path: "./fonts/barlow-semi-condensed-latin-700-normal.woff2", weight: "700" },
   ],
@@ -89,6 +88,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
           <WhatsAppFab />
         </QuoteProvider>
         <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }} />
+        <SpeedInsights />
       </body>
     </html>
   );

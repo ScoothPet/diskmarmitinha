@@ -9,11 +9,11 @@ export const metadata: Metadata = {
     "Embalagens, descartáveis, utensílios, panelas, organização, limpeza, mesa posta, decoração, jardinagem e mais. Monte sua lista e peça o orçamento.",
 };
 
-export default async function CatalogPage({ searchParams }: { searchParams: Promise<{ q?: string; pagina?: string }> }) {
-  const { q, pagina } = await searchParams;
-  const query = typeof q === "string" ? q.slice(0, 120) : "";
-  const page = Math.max(1, Number(pagina) || 1);
-  const initial = await searchProducts({ q: query, page });
+// Página pronta em cache; atualizada quando um catálogo novo é publicado em /admin/catalogo
+export const revalidate = 3600;
+
+export default async function CatalogPage() {
+  const initial = await searchProducts({});
   return (
     <>
       <PageHero
@@ -23,7 +23,7 @@ export default async function CatalogPage({ searchParams }: { searchParams: Prom
       />
       <section className="py-12 sm:py-16">
         <div className="container-site">
-          <CatalogBrowser key={`${query}|${page}`} initial={initial} initialQuery={query} />
+          <CatalogBrowser initial={initial} />
         </div>
       </section>
     </>
