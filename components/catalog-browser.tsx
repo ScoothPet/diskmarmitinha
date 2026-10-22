@@ -54,34 +54,37 @@ function Browser({ category, subcategories = [], initial, url }: Props & { url: 
   const first = useRef(true);
   const reqId = useRef(0);
   const scrollOnLoad = useRef(false);
+  const fromUrl = useRef(false);
+  const lastFilters = useRef(`${initialQuery}|${initialSub}`);
 
   // Endereço mudou (abriu com ?q=, voltou no navegador, buscou pelo cabeçalho): acompanha
   const urlKey = url ? `${url.q}|${url.sub}|${url.page}` : "";
   useEffect(() => {
     if (!url) return;
     if (url.q === query && url.sub === sub && url.page === page) return;
-    lastFilters.current = `${url.q}|${url.sub}`;
+    fromUrl.current = true; // não volta para a página 1: a página também veio do endereço
     setQuery(url.q);
     setSub(url.sub);
     setPage(url.page);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [urlKey]);
 
-  // Busca e filtros voltam para a página 1
-  const lastFilters = useRef(`${initialQuery}|${initialSub}`);
+  // Busca e filtros digitados voltam para a página 1
   useEffect(() => {
     const key = `${query}|${sub}`;
+    if (first.current) {
+      first.current = false;
+      lastFilters.current = key;
+      return;
+    }
     if (key !== lastFilters.current) {
       lastFilters.current = key;
-      if (page !== 1) {
+      if (!fromUrl.current && page !== 1) {
         setPage(1);
         return;
       }
     }
-    if (first.current) {
-      first.current = false;
-      return;
-    }
+    fromUrl.current = false;
     const id = ++reqId.current;
     const ctrl = new AbortController();
     setLoading(true);
