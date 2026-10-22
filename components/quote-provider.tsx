@@ -1,7 +1,6 @@
 "use client";
 
 import { createContext, useCallback, useContext, useEffect, useMemo, useState } from "react";
-import { products } from "@/lib/catalog";
 
 export type QuoteLine = {
   id: string;
@@ -9,14 +8,18 @@ export type QuoteLine = {
   spec: string;
   qty: number;
   custom?: boolean;
+  /** Código interno do produto no sistema da loja */
+  code?: string;
 };
+
+export type QuoteItemInfo = { name: string; spec: string; code?: string };
 
 type QuoteContextValue = {
   lines: QuoteLine[];
   totalUnits: number;
   ready: boolean;
   qtyOf: (id: string) => number;
-  add: (id: string, qty?: number) => void;
+  add: (id: string, qty?: number, info?: QuoteItemInfo) => void;
   addCustom: (name: string, qty: number) => void;
   setQty: (id: string, qty: number) => void;
   remove: (id: string) => void;
@@ -58,13 +61,12 @@ export function QuoteProvider({ children }: { children: React.ReactNode }) {
     );
   }, []);
 
-  const add = useCallback((id: string, qty = 1) => {
+  const add = useCallback((id: string, qty = 1, info?: QuoteItemInfo) => {
     setLines((prev) => {
       const existing = prev.find((l) => l.id === id);
       if (existing) return prev.map((l) => (l.id === id ? { ...l, qty: l.qty + qty } : l));
-      const product = products.find((p) => p.id === id);
-      if (!product) return prev;
-      return [...prev, { id, name: product.name, spec: product.spec, qty }];
+      if (!info) return prev;
+      return [...prev, { id, name: info.name, spec: info.spec, code: info.code, qty }];
     });
   }, []);
 

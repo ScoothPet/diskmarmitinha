@@ -1,0 +1,358 @@
+[
+ {
+  "slug": "embalagens-e-descartaveis",
+  "nome": "Embalagens e Descartáveis",
+  "total": 1044,
+  "subcategorias": [
+   {
+    "slug": "papel-filmes-e-outros",
+    "nome": "Papel, filmes e outros",
+    "total": 369
+   },
+   {
+    "slug": "sacos-e-sacolas",
+    "nome": "Sacos e sacolas",
+    "total": 293
+   },
+   {
+    "slug": "copos-pratos-e-talheres-descartaveis",
+    "nome": "Copos, pratos e talheres descartáveis",
+    "total": 190
+   },
+   {
+    "slug": "marmitas-e-potes",
+    "nome": "Marmitas e potes",
+    "total": 131
+   },
+   {
+    "slug": "presentes",
+    "nome": "Presentes",
+    "total": 52
+   },
+   {
+    "slug": "saches-e-alimentos",
+    "nome": "Sachês e alimentos",
+    "total": 9
+   }
+  ]
+ },
+ {
+  "slug": "utensilios-de-cozinha",
+  "nome": "Utensílios de Cozinha",
+  "total": 847,
+  "subcategorias": [
+   {
+    "slug": "utensilios-de-cozinha",
+    "nome": "Utensílios de cozinha",
+    "total": 529
+   },
+   {
+    "slug": "facas-e-tabuas",
+    "nome": "Facas e tábuas",
+    "total": 153
+   },
+   {
+    "slug": "confeitaria",
+    "nome": "Confeitaria",
+    "total": 84
+   },
+   {
+    "slug": "churrasco",
+    "nome": "Churrasco",
+    "total": 65
+   },
+   {
+    "slug": "eletroportateis",
+    "nome": "Eletroportáteis",
+    "total": 16
+   }
+  ]
+ },
+ {
+  "slug": "panelas",
+  "nome": "Panelas",
+  "total": 394,
+  "subcategorias": [
+   {
+    "slug": "panelas-e-frigideiras",
+    "nome": "Panelas e frigideiras",
+    "total": 228
+   },
+   {
+    "slug": "assadeiras-e-formas",
+    "nome": "Assadeiras e formas",
+    "total": 166
+   }
+  ]
+ },
+ {
+  "slug": "organizacao",
+  "nome": "Organização",
+  "total": 769,
+  "subcategorias": [
+   {
+    "slug": "caixas-e-organizadores",
+    "nome": "Caixas e organizadores",
+    "total": 497
+   },
+   {
+    "slug": "potes-e-mantimentos",
+    "nome": "Potes e mantimentos",
+    "total": 184
+   },
+   {
+    "slug": "cestos",
+    "nome": "Cestos",
+    "total": 88
+   }
+  ]
+ },
+ {
+  "slug": "limpeza-e-higiene",
+  "nome": "Limpeza e Higiene",
+  "total": 733,
+  "subcategorias": [
+   {
+    "slug": "limpeza-e-higiene",
+    "nome": "Limpeza e higiene",
+    "total": 492
+   },
+   {
+    "slug": "lixeiras",
+    "nome": "Lixeiras",
+    "total": 156
+   },
+   {
+    "slug": "lavanderia",
+    "nome": "Lavanderia",
+    "total": 85
+   }
+  ]
+ },
+ {
+  "slug": "mesa-posta",
+  "nome": "Mesa Posta",
+  "total": 1380,
+  "subcategorias": [
+   {
+    "slug": "pratos-e-loucas",
+    "nome": "Pratos e louças",
+    "total": 484
+   },
+   {
+    "slug": "copos-tacas-e-xicaras",
+    "nome": "Copos, taças e xícaras",
+    "total": 294
+   },
+   {
+    "slug": "acessorios-de-mesa",
+    "nome": "Acessórios de mesa",
+    "total": 250
+   },
+   {
+    "slug": "talheres",
+    "nome": "Talheres",
+    "total": 199
+   },
+   {
+    "slug": "cafe-e-cha",
+    "nome": "Café e chá",
+    "total": 120
+   },
+   {
+    "slug": "toalhas-e-plastico-por-metro",
+    "nome": "Toalhas e plástico por metro",
+    "total": 16
+   },
+   {
+    "slug": "bar-e-drinks",
+    "nome": "Bar e drinks",
+    "total": 11
+   },
+   {
+    "slug": "fondue-e-rechaud",
+    "nome": "Fondue e rechaud",
+    "total": 6
+   }
+  ]
+ },
+ {
+  "slug": "decoracao",
+  "nome": "Decoração",
+  "total": 592,
+  "subcategorias": [
+   {
+    "slug": "objetos-decorativos",
+    "nome": "Objetos decorativos",
+    "total": 204
+   },
+   {
+    "slug": "vasos-e-plantas",
+    "nome": "Vasos e plantas",
+    "total": 147
+   },
+   {
+    "slug": "texteis-e-tapetes",
+    "nome": "Têxteis e tapetes",
+    "total": 123
+   },
+   {
+    "slug": "aromas-e-velas",
+    "nome": "Aromas e velas",
+    "total": 118
+   }
+  ]
+ },
+ {
+  "slug": "linha-industrial",
+  "nome": "Linha Industrial",
+  "total": 331,
+  "subcategorias": [
+   {
+    "slug": "cozinha-profissional",
+    "nome": "Cozinha profissional",
+    "total": 265
+   },
+   {
+    "slug": "calcados-e-epi",
+    "nome": "Calçados e EPI",
+    "total": 40
+   },
+   {
+    "slug": "food-service-e-loja",
+    "nome": "Food service e loja",
+    "total": 26
+   }
+  ]
+ },
+ {
+  "slug": "jardinagem",
+  "nome": "Jardinagem",
+  "total": 160,
+  "subcategorias": [
+   {
+    "slug": "vasos-e-jardineiras",
+    "nome": "Vasos e jardineiras",
+    "total": 75
+   },
+   {
+    "slug": "plantas-artificiais",
+    "nome": "Plantas artificiais",
+    "total": 48
+   },
+   {
+    "slug": "rega",
+    "nome": "Rega",
+    "total": 17
+   },
+   {
+    "slug": "adubos-e-substratos",
+    "nome": "Adubos e substratos",
+    "total": 14
+   },
+   {
+    "slug": "ferramentas-de-jardim",
+    "nome": "Ferramentas de jardim",
+    "total": 6
+   }
+  ]
+ },
+ {
+  "slug": "casa-e-ferramentas",
+  "nome": "Casa e Ferramentas",
+  "total": 314,
+  "subcategorias": [
+   {
+    "slug": "ferramentas-e-sinalizacao",
+    "nome": "Ferramentas e sinalização",
+    "total": 195
+   },
+   {
+    "slug": "hidraulica",
+    "nome": "Hidráulica",
+    "total": 64
+   },
+   {
+    "slug": "protecao-e-acabamento",
+    "nome": "Proteção e acabamento",
+    "total": 21
+   },
+   {
+    "slug": "fitas-e-fixacao",
+    "nome": "Fitas e fixação",
+    "total": 16
+   },
+   {
+    "slug": "eletrica",
+    "nome": "Elétrica",
+    "total": 12
+   },
+   {
+    "slug": "papelaria",
+    "nome": "Papelaria",
+    "total": 6
+   }
+  ]
+ },
+ {
+  "slug": "cama-mesa-e-banho",
+  "nome": "Cama, Mesa e Banho",
+  "total": 34,
+  "subcategorias": [
+   {
+    "slug": "banho-e-enxoval",
+    "nome": "Banho e enxoval",
+    "total": 34
+   }
+  ]
+ },
+ {
+  "slug": "lazer-infantil-e-pet",
+  "nome": "Lazer, Infantil e Pet",
+  "total": 49,
+  "subcategorias": [
+   {
+    "slug": "infantil",
+    "nome": "Infantil",
+    "total": 11
+   },
+   {
+    "slug": "chuva",
+    "nome": "Chuva",
+    "total": 10
+   },
+   {
+    "slug": "lazer-e-camping",
+    "nome": "Lazer e camping",
+    "total": 10
+   },
+   {
+    "slug": "pet",
+    "nome": "Pet",
+    "total": 8
+   },
+   {
+    "slug": "moveis",
+    "nome": "Móveis",
+    "total": 7
+   },
+   {
+    "slug": "jogos",
+    "nome": "Jogos",
+    "total": 3
+   }
+  ]
+ },
+ {
+  "slug": "natal",
+  "nome": "Natal",
+  "total": 295,
+  "subcategorias": [
+   {
+    "slug": "decoracao-de-natal",
+    "nome": "Decoração de Natal",
+    "total": 295
+   }
+  ]
+ }
+]

@@ -118,7 +118,7 @@ export function QuoteForm() {
   const unit = units.find((u) => u.id === form.unit);
 
   const message = useMemo(() => {
-    const itemLines = lines.map((l) => `- ${l.qty} x ${l.name} (${l.spec})`).join("\n");
+    const itemLines = lines.map((l) => `- ${l.qty} x ${l.name} (${l.spec})${l.code ? ` [cód. ${l.code}]` : ""}`).join("\n");
     const receive =
       mode === "entrega"
         ? `Recebimento: entrega\nCEP: ${form.cep}\nEndereço: ${form.street}, ${form.number}${form.complement ? ` - ${form.complement}` : ""}\nBairro: ${form.district}\nCidade: ${form.city}/${form.uf}`

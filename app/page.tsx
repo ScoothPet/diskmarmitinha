@@ -34,7 +34,7 @@ const steps = [
 ];
 
 const ambientes = [
-  { title: "Cozinha completa", text: "Panelas, utensílios e louças para o dia a dia e para a cozinha profissional.", image: "/images/panelas.jpg", href: "/catalogo/cozinha" },
+  { title: "Cozinha completa", text: "Panelas, utensílios e louças para o dia a dia e para a cozinha profissional.", image: "/images/panelas.jpg", href: "/catalogo/panelas" },
   { title: "Organização", text: "Potes, caixas e organizadores para geladeira, despensa e lavanderia.", image: "/images/organizadores.jpg", href: "/catalogo/organizacao" },
   { title: "Casa & estilo", text: "Cestos, mantas e peças de decoração que deixam a casa mais acolhedora.", image: "/images/toalhas.jpg", href: "/catalogo/decoracao" },
 ];
