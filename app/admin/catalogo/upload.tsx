@@ -134,6 +134,13 @@ export function CatalogUpload() {
 
   return (
     <div className="mt-8 grid gap-6">
+      <div>
+        <h2 className="font-display text-[26px] font-semibold text-navy-800">Atualizar catálogo</h2>
+        <p className="mt-2 text-[15px] leading-relaxed text-ink-500">
+          Envie as listas de produtos exportadas do VendasPCP das duas lojas. O site entende o que está à venda, cria nomes, descrições e categorias, e
+          publica em poucos minutos. Preço e estoque não saem do seu computador: só é enviado se cada produto está à venda em cada loja.
+        </p>
+      </div>
       {situacao && (
         <p className="rounded-xl bg-mist-50 px-4 py-3 text-[14px] text-ink-700">
           No ar agora: <strong>{fmt(situacao.total)} produtos</strong>
