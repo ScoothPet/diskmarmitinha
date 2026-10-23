@@ -75,8 +75,12 @@ export function QuoteForm() {
   const [errors, setErrors] = useState<Partial<Record<keyof Form | "items", string>>>({});
   const [cepState, setCepState] = useState<"idle" | "loading" | "ok" | "error">("idle");
   const [custom, setCustom] = useState({ name: "", qty: 1 });
-  const [sent, setSent] = useState<null | { message: string }>(null);
+  const [sent, setSent] = useState<null | { message: string; channel: "whatsapp" | "email" }>(null);
+  const [sending, setSending] = useState(false);
   const formRef = useRef<HTMLFormElement>(null);
+  // Anti-robô: momento em que o formulário abriu e campo invisível que só robôs preenchem
+  const openedAt = useRef(Date.now());
+  const [trap, setTrap] = useState("");
 
   const set = <K extends keyof Form>(key: K, value: Form[K]) => {
     setForm((f) => ({ ...f, [key]: value }));
@@ -168,15 +172,62 @@ export function QuoteForm() {
     return !first;
   }
 
-  function send(channel: "whatsapp" | "email") {
-    if (!validate()) return;
-    const url = channel === "whatsapp" ? whatsappLink(message) : mailtoLink(`Pedido de orçamento - ${form.name}`, message);
-    setSent({ message });
+  /** Registra o pedido por e-mail no servidor do site (aviso à loja + confirmação ao cliente). */
+  function register(channel: "whatsapp" | "email") {
+    const payload = {
+      id: typeof crypto !== "undefined" && "randomUUID" in crypto ? crypto.randomUUID() : `${Date.now()}-${Math.random().toString(36).slice(2)}`,
+      canal: channel,
+      nome: form.name.trim(),
+      email: form.email.trim(),
+      telefone: form.phone,
+      perfil: form.audience,
+      empresa: form.audience !== "casa" ? form.company.trim() : "",
+      documento: form.doc,
+      recebimento:
+        mode === "entrega"
+          ? { tipo: "entrega", cep: form.cep, rua: form.street, numero: form.number, complemento: form.complement, bairro: form.district, cidade: form.city, uf: form.uf }
+          : { tipo: "retirada", loja: unit?.name ?? "" },
+      itens: lines.map((l) => ({ nome: l.name, spec: l.spec, qtd: l.qty, codigo: l.code })),
+      observacoes: form.notes.trim(),
+      site: trap,
+      t: openedAt.current,
+    };
+    return fetch("/api/orcamento", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(payload),
+      keepalive: true,
+    });
+  }
+
+  function finish(channel: "whatsapp" | "email") {
+    setSent({ message, channel });
     clear();
     setForm((f) => ({ ...f, notes: "" }));
-    if (channel === "whatsapp") window.open(url, "_blank", "noopener,noreferrer");
-    else window.location.href = url;
     window.scrollTo({ top: 0, behavior: "smooth" });
+  }
+
+  async function send(channel: "whatsapp" | "email") {
+    if (!validate() || sending) return;
+    if (channel === "whatsapp") {
+      // O WhatsApp nunca espera o e-mail: o registro segue em segundo plano.
+      register("whatsapp").catch(() => {});
+      window.open(whatsappLink(message), "_blank", "noopener,noreferrer");
+      finish("whatsapp");
+      return;
+    }
+    // Por e-mail: o site envia direto. Se falhar, abre o aplicativo de e-mail como antes.
+    setSending(true);
+    let ok = false;
+    try {
+      const res = await register("email");
+      ok = res.ok;
+    } catch {
+      ok = false;
+    }
+    setSending(false);
+    if (!ok) window.location.href = mailtoLink(`Pedido de orçamento - ${form.name}`, message);
+    finish("email");
   }
 
   if (!ready) {
@@ -604,10 +655,15 @@ export function QuoteForm() {
             <WhatsAppIcon className="size-5" />
             Enviar pelo WhatsApp
           </button>
-          <button type="button" onClick={() => send("email")} className="btn-outline mt-3 w-full">
-            <Mail aria-hidden="true" className="size-4" />
-            Enviar por e-mail
+          <button type="button" onClick={() => send("email")} disabled={sending} aria-busy={sending} className="btn-outline mt-3 w-full disabled:opacity-60">
+            {sending ? <Loader2 aria-hidden="true" className="size-4 animate-spin" /> : <Mail aria-hidden="true" className="size-4" />}
+            {sending ? "Enviando..." : "Enviar por e-mail"}
           </button>
+          {/* Campo invisível anti-robô: pessoas não veem nem preenchem */}
+          <div aria-hidden="true" style={{ position: "absolute", left: "-10000px", width: 1, height: 1, overflow: "hidden" }}>
+            <label htmlFor="site-url">Não preencha</label>
+            <input id="site-url" name="site-url" type="text" tabIndex={-1} autoComplete="off" value={trap} onChange={(e) => setTrap(e.target.value)} />
+          </div>
           {Object.values(errors).some(Boolean) && (
             <p role="alert" className="mt-4 text-[13px] font-medium text-[#b42318]">
               Confira os campos destacados antes de enviar.
