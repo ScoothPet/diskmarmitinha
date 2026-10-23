@@ -8,7 +8,7 @@ import { site, telLink, units, whatsappLagoaSantaLink, whatsappLink } from "@/li
 
 export const metadata: Metadata = {
   title: "Contato",
-  description: "Fale com a Disk Marmitinha pelo telefone (31) 3452-7011, pelo WhatsApp ou pelo e-mail loja01@diskmarmitinha.com.br.",
+  description: "Fale com a Disk Marmitinha pelo telefone (31) 3452-7011, pelo WhatsApp ou pelo e-mail dm.digital@diskmarmitinha.com.br.",
 };
 
 export default function ContactPage() {

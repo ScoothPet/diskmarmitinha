@@ -127,7 +127,7 @@ export function QuoteForm() {
     const who = [
       `Nome: ${form.name}`,
       `WhatsApp: ${form.phone}`,
-      form.email && `E-mail: ${form.email}`,
+      `E-mail: ${form.email.trim()}`,
       `Perfil: ${audience}`,
       form.audience !== "casa" && form.company && `${form.audience === "empresa" ? "Empresa" : "Condomínio"}: ${form.company}`,
       form.doc && `${form.doc.replace(/\D/g, "").length > 11 ? "CNPJ" : "CPF"}: ${form.doc}`,
@@ -152,7 +152,8 @@ export function QuoteForm() {
     }
     if (!form.name.trim()) e.name = "Informe seu nome.";
     if (form.phone.replace(/\D/g, "").length < 10) e.phone = "Informe um WhatsApp com DDD.";
-    if (form.email && !/^\S+@\S+\.\S+$/.test(form.email)) e.email = "E-mail inválido.";
+    if (!form.email.trim()) e.email = "Informe seu e-mail.";
+    else if (!/^\S+@\S+\.\S+$/.test(form.email.trim())) e.email = "E-mail inválido.";
     const docLen = form.doc.replace(/\D/g, "").length;
     if (!docLen) e.doc = "Informe seu CPF ou CNPJ.";
     else if (docLen !== 11 && docLen !== 14) e.doc = "Informe um CPF (11 dígitos) ou CNPJ (14 dígitos).";

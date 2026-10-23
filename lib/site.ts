@@ -23,7 +23,7 @@ export const site = {
     conditions: "Consulte as condições",
     full: "Frete grátis a partir de R$ 150 em BH e região, mediante condições. Consulte as condições com a nossa equipe.",
   },
-  email: "loja01@diskmarmitinha.com.br",
+  email: "dm.digital@diskmarmitinha.com.br",
   instagram: {
     handle: "@diskmarmitinha",
     url: "https://www.instagram.com/diskmarmitinha",
