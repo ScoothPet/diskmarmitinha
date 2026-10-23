@@ -163,13 +163,21 @@ ${b.observacoes ? `<p style="margin:16px 0 0;font-size:14px"><strong>Observaçõ
 export async function POST(req: NextRequest) {
   const ip = (req.headers.get("x-forwarded-for") ?? "").split(",")[0].trim() || "anon";
   const origin = req.headers.get("origin") ?? "";
-  const host = req.headers.get("host") ?? "";
-  if (origin && host) {
-    let mesmoSite = false;
+  // Aceita o endereço em que o site foi aberto (Vercel repassa em x-forwarded-host) e o domínio oficial.
+  const hosts = new Set(
+    [req.headers.get("x-forwarded-host"), req.headers.get("host"), req.nextUrl.host, process.env.NEXT_PUBLIC_SITE_URL]
+      .filter(Boolean)
+      .map((h) => String(h).replace(/^https?:\/\//, "").replace(/\/.*$/, "").toLowerCase()),
+  );
+  if (origin) {
+    let originHost = "";
     try {
-      mesmoSite = new URL(origin).host === host;
+      originHost = new URL(origin).host.toLowerCase();
     } catch {}
-    if (!mesmoSite) return NextResponse.json({ ok: false }, { status: 403 });
+    if (!hosts.has(originHost)) {
+      console.warn("orcamento: origem recusada", origin, [...hosts].join(","));
+      return NextResponse.json({ ok: false }, { status: 403 });
+    }
   }
 
   let raw: unknown;
@@ -179,12 +187,24 @@ export async function POST(req: NextRequest) {
     return NextResponse.json({ ok: false, error: "dados inválidos" }, { status: 400 });
   }
   const b = parse(raw);
-  if (!b) return NextResponse.json({ ok: false, error: "dados inválidos" }, { status: 400 });
+  if (!b) {
+    console.warn("orcamento: dados inválidos");
+    return NextResponse.json({ ok: false, error: "dados inválidos" }, { status: 400 });
+  }
 
   // Robôs: campo invisível preenchido ou formulário enviado rápido demais. Responde "ok" sem enviar nada.
-  if (b.site || (b.t && Date.now() - b.t < 3000)) return NextResponse.json({ ok: true });
-  if (limited(ip)) return NextResponse.json({ ok: false, error: "muitas tentativas" }, { status: 429 });
-  if (!emailEnabled()) return NextResponse.json({ ok: false, error: "e-mail não configurado" }, { status: 503 });
+  if (b.site || (b.t && Date.now() - b.t < 3000)) {
+    console.warn("orcamento: bloqueado como robô", b.site ? "campo invisível preenchido" : "envio rápido demais");
+    return NextResponse.json({ ok: true });
+  }
+  if (limited(ip)) {
+    console.warn("orcamento: limite de envios atingido");
+    return NextResponse.json({ ok: false, error: "muitas tentativas" }, { status: 429 });
+  }
+  if (!emailEnabled()) {
+    console.error("orcamento: RESEND_API_KEY não configurada neste deploy");
+    return NextResponse.json({ ok: false, error: "e-mail não configurado" }, { status: 503 });
+  }
 
   const { html, text } = avisoLoja(b);
   const loja = await sendEmail({
@@ -195,7 +215,8 @@ export async function POST(req: NextRequest) {
     text,
     idempotencyKey: b.id ? `orc-${b.id}-loja` : undefined,
   });
-  if (!loja.ok) console.error("orcamento: aviso à loja falhou", loja.status, loja.error);
+  if (loja.ok) console.info("orcamento: aviso à loja enviado", loja.id, b.canal);
+  else console.error("orcamento: aviso à loja falhou", loja.status, loja.error);
 
   let cliente: "enviado" | "sem-modelo" | "falhou" = "sem-modelo";
   if (emailConfig.templateOrcamento) {
@@ -216,6 +237,7 @@ export async function POST(req: NextRequest) {
       idempotencyKey: b.id ? `orc-${b.id}-cliente` : undefined,
     });
     cliente = res.ok ? "enviado" : "falhou";
+    if (res.ok) console.info("orcamento: confirmação ao cliente enviada", res.id);
     if (!res.ok) console.error("orcamento: e-mail ao cliente falhou", res.status, res.error);
   }
 

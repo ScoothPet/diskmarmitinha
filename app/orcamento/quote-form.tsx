@@ -661,8 +661,8 @@ export function QuoteForm() {
           </button>
           {/* Campo invisível anti-robô: pessoas não veem nem preenchem */}
           <div aria-hidden="true" style={{ position: "absolute", left: "-10000px", width: 1, height: 1, overflow: "hidden" }}>
-            <label htmlFor="site-url">Não preencha</label>
-            <input id="site-url" name="site-url" type="text" tabIndex={-1} autoComplete="off" value={trap} onChange={(e) => setTrap(e.target.value)} />
+            <label htmlFor="dm-hp-campo">Deixe em branco</label>
+            <input id="dm-hp-campo" name="dm_hp_campo" type="text" tabIndex={-1} autoComplete="off" data-lpignore="true" data-1p-ignore="true" data-form-type="other" value={trap} onChange={(e) => setTrap(e.target.value)} />
           </div>
           {Object.values(errors).some(Boolean) && (
             <p role="alert" className="mt-4 text-[13px] font-medium text-[#b42318]">
