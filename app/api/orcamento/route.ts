@@ -206,11 +206,10 @@ export async function POST(req: NextRequest) {
       replyTo: emailConfig.loja,
       template: {
         id: emailConfig.templateOrcamento,
+        // Precisam existir no modelo da Resend (emails/orcamento-cliente.html), todas como string.
         variables: {
-          NOME: b.nome,
           PRIMEIRO_NOME: b.nome.split(/\s+/)[0],
-          QTD_PRODUTOS: b.itens.length,
-          ITENS: b.itens.map((i) => `${i.qtd} x ${i.nome}`).join("; "),
+          QTD_PRODUTOS: String(b.itens.length),
           RECEBIMENTO: r.tipo === "entrega" ? `Entrega em ${r.cidade}/${r.uf}` : `Retirada na loja ${r.loja}`,
         },
       },
