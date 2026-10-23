@@ -636,10 +636,7 @@ export function QuoteForm() {
                 onChange={(e) => setOptIn(e.target.checked)}
                 className="mt-0.5 size-4 shrink-0 accent-navy-800"
               />
-              <span>
-                Quero receber novidades e ofertas da Disk Marmitinha por e-mail.
-                <span className="mt-0.5 block text-[13px] text-ink-500">Opcional. Você pode cancelar quando quiser pelo link no próprio e-mail.</span>
-              </span>
+              <span>Quero receber novidades e ofertas da Disk Marmitinha!</span>
             </label>
           </div>
         </section>
