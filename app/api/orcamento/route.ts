@@ -236,7 +236,12 @@ export async function POST(req: NextRequest) {
         // Precisam existir no modelo da Resend (emails/orcamento-cliente.html), todas como string.
         variables: {
           PRIMEIRO_NOME: b.nome.split(/\s+/)[0],
-          QTD_PRODUTOS: String(b.itens.length),
+          // Ex.: "1 produto · 2 unidades" (mesma conta do resumo do site)
+          QTD_PRODUTOS: (() => {
+            const p = b.itens.length;
+            const u = b.itens.reduce((t, i) => t + i.qtd, 0);
+            return `${p} ${p === 1 ? "produto" : "produtos"} · ${u} ${u === 1 ? "unidade" : "unidades"}`;
+          })(),
           RECEBIMENTO: r.tipo === "entrega" ? `Entrega em ${r.cidade}/${r.uf}` : `Retirada na loja ${r.loja}`,
         },
       },
