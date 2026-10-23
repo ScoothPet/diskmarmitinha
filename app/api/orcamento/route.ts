@@ -1,5 +1,5 @@
 import { NextResponse, type NextRequest } from "next/server";
-import { emailConfig, emailEnabled, escapeHtml, sendEmail } from "@/lib/resend";
+import { emailConfig, emailEnabled, escapeHtml, inscreverNovidades, sendEmail } from "@/lib/resend";
 
 /**
  * Registra o pedido de orçamento por e-mail:
@@ -25,6 +25,8 @@ type Body = {
     | { tipo: "retirada"; loja: string };
   itens: Item[];
   observacoes?: string;
+  /** cliente marcou "quero receber novidades e ofertas" */
+  novidades?: boolean;
   /** campo invisível: se vier preenchido, é robô */
   site?: string;
   /** momento em que o formulário foi aberto (ms) */
@@ -83,6 +85,7 @@ function parse(raw: unknown): Body | null {
     recebimento,
     itens,
     observacoes: str(b.observacoes, 2000),
+    novidades: b.novidades === true,
     site: str(b.site, 100),
     t: Number(b.t) || 0,
   };
@@ -206,6 +209,9 @@ export async function POST(req: NextRequest) {
     return NextResponse.json({ ok: false, error: "e-mail não configurado" }, { status: 503 });
   }
 
+  // Inscrição na lista de novidades roda em paralelo e nunca impede o pedido.
+  const inscricao = b.novidades ? inscreverNovidades({ email: b.email, nome: b.nome }) : null;
+
   const { html, text } = avisoLoja(b);
   const loja = await sendEmail({
     to: emailConfig.loja,
@@ -241,5 +247,13 @@ export async function POST(req: NextRequest) {
     if (!res.ok) console.error("orcamento: e-mail ao cliente falhou", res.status, res.error);
   }
 
-  return NextResponse.json({ ok: loja.ok, cliente }, { status: loja.ok ? 200 : 502 });
+  let novidades: "inscrito" | "falhou" | "nao" = "nao";
+  if (inscricao) {
+    const r = await inscricao;
+    novidades = r.ok ? "inscrito" : "falhou";
+    if (r.ok) console.info("orcamento: inscrito na lista de novidades");
+    else console.error("orcamento: inscrição em novidades falhou", r.erro);
+  }
+
+  return NextResponse.json({ ok: loja.ok, cliente, novidades }, { status: loja.ok ? 200 : 502 });
 }

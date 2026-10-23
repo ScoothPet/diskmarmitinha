@@ -81,6 +81,8 @@ export function QuoteForm() {
   // Anti-robô: momento em que o formulário abriu e campo invisível que só robôs preenchem
   const openedAt = useRef(Date.now());
   const [trap, setTrap] = useState("");
+  // Consentimento para novidades: sempre começa desmarcado (LGPD)
+  const [optIn, setOptIn] = useState(false);
 
   const set = <K extends keyof Form>(key: K, value: Form[K]) => {
     setForm((f) => ({ ...f, [key]: value }));
@@ -189,6 +191,7 @@ export function QuoteForm() {
           : { tipo: "retirada", loja: unit?.name ?? "" },
       itens: lines.map((l) => ({ nome: l.name, spec: l.spec, qtd: l.qty, codigo: l.code })),
       observacoes: form.notes.trim(),
+      novidades: optIn,
       site: trap,
       t: openedAt.current,
     };
@@ -204,6 +207,7 @@ export function QuoteForm() {
     setSent({ message, channel });
     clear();
     setForm((f) => ({ ...f, notes: "" }));
+    setOptIn(false);
     window.scrollTo({ top: 0, behavior: "smooth" });
   }
 
@@ -624,6 +628,19 @@ export function QuoteForm() {
                 </div>
               </>
             )}
+            <label htmlFor="novidades" className="flex cursor-pointer items-start gap-3 rounded-lg border border-mist-200 bg-mist-50 p-4 text-[14px] leading-relaxed text-ink-700 sm:col-span-2">
+              <input
+                id="novidades"
+                type="checkbox"
+                checked={optIn}
+                onChange={(e) => setOptIn(e.target.checked)}
+                className="mt-0.5 size-4 shrink-0 accent-navy-800"
+              />
+              <span>
+                Quero receber novidades e ofertas da Disk Marmitinha por e-mail.
+                <span className="mt-0.5 block text-[13px] text-ink-500">Opcional. Você pode cancelar quando quiser pelo link no próprio e-mail.</span>
+              </span>
+            </label>
           </div>
         </section>
       </div>
